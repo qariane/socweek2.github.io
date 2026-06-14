@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOC 2 Risk Assessment and Control Mapping</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+
+:root{
+  --white:#ffffff;
+  --page:#f5f6f8;
+  --surface:#ffffff;
+  --surface2:#f0f2f5;
+  --border:#e2e5eb;
+  --border2:#cdd2db;
+  --text:#111827;
+  --text2:#374151;
+  --muted:#6b7280;
+  --muted2:#9ca3af;
+  --navy:#0f2044;
+  --blue:#1d4ed8;
+  --blue-light:#eff4ff;
+  --blue-mid:#bfcfff;
+  --critical-bg:#fef2f2;
+  --critical-text:#991b1b;
+  --critical-border:#fca5a5;
+  --high-bg:#fff7ed;
+  --high-text:#9a3412;
+  --high-border:#fdba74;
+  --medium-bg:#fefce8;
+  --medium-text:#854d0e;
+  --medium-border:#fde047;
+  --low-bg:#f0fdf4;
+  --low-text:#166534;
+  --low-border:#86efac;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+  --r4:4px;--r8:8px;--r12:12px;
+}
+
+body{background:var(--page);color:var(--text);font-family:var(--sans);line-height:1.65;min-height:100vh}
+
+/* AWS BRANDING */
+.aws-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.aws-smile{width:36px;height:36px;flex-shrink:0}
+.aws-wordmark{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.02em;line-height:1}
+.aws-sub{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;letter-spacing:0.04em}
+
+/* CONFIDENTIALITY FOOTER */
+.conf-footer{
+  background:#0f2044;
+  border-top:1px solid rgba(255,255,255,0.1);
+  padding:14px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+}
+.conf-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(239,68,68,0.12);
+  border:1px solid rgba(239,68,68,0.3);
+  border-radius:4px;padding:5px 12px;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:#fca5a5;letter-spacing:0.12em;text-transform:uppercase;
+}
+.conf-badge svg{flex-shrink:0}
+.conf-text{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;max-width:560px}
+
+/* SIDEBAR LAYOUT */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+.sidebar{
+  background:var(--navy);
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+  padding:0 0 24px;
+}
+.sidebar-logo{
+  padding:28px 24px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  margin-bottom:8px;
+}
+.sidebar-logo-tag{
+  font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);font-family:var(--mono);
+  margin-bottom:6px;
+}
+.sidebar-logo-title{
+  font-size:14px;font-weight:600;color:#fff;line-height:1.3;
+}
+.sidebar-section-label{
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);font-family:var(--mono);
+  padding:16px 24px 6px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 24px;
+  color:rgba(255,255,255,0.55);
+  font-size:13px;font-weight:400;
+  cursor:pointer;border:none;background:none;
+  width:100%;text-align:left;
+  transition:color 0.15s,background 0.15s;
+  font-family:var(--sans);
+  border-left:2px solid transparent;
+}
+.nav-item:hover{color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.05)}
+.nav-item.active{color:#fff;background:rgba(255,255,255,0.08);border-left-color:#4f8ef7;font-weight:500}
+.nav-item .nav-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,0.2);
+}
+.nav-item.active .nav-dot{background:#4f8ef7}
+
+/* MAIN CONTENT */
+.main{min-width:0;padding:0;display:flex;flex-direction:column;min-height:100vh}
+.main-body{flex:1}
+
+/* PAGE HEADER */
+.page-header{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:40px 48px 36px;
+}
+.page-header-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--blue);margin-bottom:10px;
+}
+.page-header h1{
+  font-size:26px;font-weight:600;color:var(--navy);
+  line-height:1.25;margin-bottom:10px;
+}
+.page-header-desc{font-size:14px;color:var(--muted);max-width:560px;line-height:1.6}
+.header-meta{
+  display:flex;gap:32px;margin-top:24px;padding-top:20px;
+  border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-val{font-size:20px;font-weight:600;color:var(--navy);line-height:1}
+.meta-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:3px}
+
+/* SECTION */
+.section{display:none;padding:36px 48px 64px;animation:fadeUp 0.22s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.sec-title{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.sec-intro{font-size:14px;color:var(--muted);max-width:600px;line-height:1.65;margin-bottom:32px}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r12);padding:20px 24px;margin-bottom:14px}
+.card-label{font-size:11px;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:6px;font-weight:500}
+.card-val{font-size:14px;color:var(--text2);line-height:1.6}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--mono);letter-spacing:0.03em;white-space:nowrap}
+.badge-critical{background:var(--critical-bg);color:var(--critical-text);border:1px solid var(--critical-border)}
+.badge-high{background:var(--high-bg);color:var(--high-text);border:1px solid var(--high-border)}
+.badge-medium{background:var(--medium-bg);color:var(--medium-text);border:1px solid var(--medium-border)}
+.badge-low{background:var(--low-bg);color:var(--low-text);border:1px solid var(--low-border)}
+.badge-blue{background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid)}
+
+/* STEPS */
+.steps{border-left:2px solid var(--border);margin-left:10px;padding-left:0}
+.step{display:grid;grid-template-columns:20px 1fr;gap:20px;padding:0 0 28px 28px;position:relative}
+.step::before{
+  content:'';position:absolute;left:-7px;top:3px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--blue);border:2px solid var(--white);
+  box-shadow:0 0 0 2px var(--blue);
+}
+.step-num{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:500;line-height:1.8}
+.step h3{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.step p{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r12);background:var(--white);margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:var(--surface2);border-bottom:1px solid var(--border)}
+th{
+  padding:11px 16px;text-align:left;
+  font-size:10.5px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--muted);font-weight:600;white-space:nowrap;
+}
+td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text2);line-height:1.5}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#fafbfc}
+.td-id{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.td-primary{font-weight:500;color:var(--text)}
+.td-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.td-mono{font-family:var(--mono);font-size:11px;color:var(--blue)}
+
+/* RISK REGISTER */
+.risk-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.rfbtn{
+  padding:6px 16px;border-radius:20px;
+  border:1px solid var(--border);background:var(--white);
+  font-size:12px;font-weight:500;color:var(--muted);
+  cursor:pointer;font-family:var(--sans);transition:all 0.15s;
+}
+.rfbtn:hover{border-color:var(--border2);color:var(--text)}
+.rfbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.rfbtn.on-critical{background:var(--critical-bg);border-color:var(--critical-border);color:var(--critical-text)}
+.rfbtn.on-high{background:var(--high-bg);border-color:var(--high-border);color:var(--high-text)}
+.rfbtn.on-medium{background:var(--medium-bg);border-color:var(--medium-border);color:var(--medium-text)}
+
+.impact-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;
+}
+.r-critical .impact-dot{background:var(--critical-text)}
+.r-high .impact-dot{background:#c2410c}
+.r-medium .impact-dot{background:#a16207}
+
+/* risk detail expand */
+.rdetail{display:none;background:#fafbfc;border-top:1px solid var(--border)}
+.rdetail td{padding:12px 16px 16px}
+.rdetail-inner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.rdi-label{font-size:10px;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);font-weight:600;margin-bottom:4px}
+.rdi-val{font-size:13px;color:var(--text2)}
+.expand-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:11px;color:var(--blue);font-family:var(--sans);
+  padding:0;display:flex;align-items:center;gap:4px;
+  margin-top:3px;font-weight:500;
+}
+.expand-btn .arr{display:inline-block;transition:transform 0.2s;font-size:9px}
+.expand-btn.open .arr{transform:rotate(180deg)}
+
+/* TSC TABS */
+.tsc-tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tsc-tab{
+  padding:10px 20px;border:none;background:none;
+  font-size:13px;font-weight:500;color:var(--muted);
+  cursor:pointer;font-family:var(--sans);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:color 0.15s,border-color 0.15s;
+}
+.tsc-tab:hover{color:var(--text)}
+.tsc-tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.tsc-panel{display:none}
+.tsc-panel.active{display:block}
+
+/* ctrl row */
+.ctrl-tbl-row td:first-child{width:180px}
+
+/* ACCORDION */
+.acc{border:1px solid var(--border);border-radius:var(--r8);overflow:hidden;margin-bottom:8px;background:var(--white)}
+.acc-hdr{
+  width:100%;background:none;border:none;padding:15px 20px;
+  text-align:left;color:var(--text);font-family:var(--sans);
+  font-size:13px;font-weight:500;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;transition:background 0.15s;
+}
+.acc-hdr:hover{background:var(--page)}
+.acc-arr{font-size:10px;color:var(--muted);transition:transform 0.2s;flex-shrink:0}
+.acc-hdr.open .acc-arr{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 20px 18px;border-top:1px solid var(--border);background:#fafbfc}
+.acc-body.open{display:block}
+.acc-body p{font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px}
+.acc-body ul{padding-left:16px;margin-top:8px}
+.acc-body li{font-size:13px;color:var(--muted);margin-bottom:4px;line-height:1.6}
+
+/* QUIZ */
+.quiz-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r12);padding:28px;margin-bottom:16px}
+.quiz-num{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:0.1em;text-transform:uppercase}
+.quiz-q{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:20px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.qopt{
+  padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--r8);
+  background:var(--white);color:var(--text2);text-align:left;
+  cursor:pointer;font-family:var(--sans);font-size:13px;
+  transition:all 0.15s;
+}
+.qopt:hover:not(:disabled){border-color:var(--blue);color:var(--navy);background:var(--blue-light)}
+.qopt.correct{border-color:#22c55e;background:#f0fdf4;color:#15803d;font-weight:500}
+.qopt.wrong{border-color:#ef4444;background:#fef2f2;color:#dc2626}
+.qopt:disabled{cursor:default}
+.qfb{margin-top:12px;padding:10px 14px;border-radius:var(--r8);font-size:13px;display:none;line-height:1.6}
+.qfb.correct{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+.qfb.wrong{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+.quiz-score{text-align:center;padding:48px 32px;background:var(--white);border:1px solid var(--border);border-radius:var(--r12);display:none}
+.score-num{font-size:52px;font-weight:700;color:var(--navy);font-family:var(--mono);line-height:1}
+.score-denom{font-size:24px;font-weight:400;color:var(--muted)}
+.score-sub{font-size:14px;color:var(--muted);margin-top:8px;margin-bottom:24px}
+.score-bar-wrap{max-width:240px;margin:0 auto 24px;height:4px;background:var(--border);border-radius:2px}
+.score-bar-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 0.6s ease}
+.btn-retry{padding:10px 28px;background:var(--navy);border:none;border-radius:var(--r8);color:#fff;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;transition:opacity 0.15s}
+.btn-retry:hover{opacity:0.85}
+
+/* GLOSSARY */
+.gloss-bar{
+  position:sticky;top:0;z-index:10;background:var(--page);
+  padding:0 0 20px;
+}
+.gloss-search{
+  width:100%;padding:11px 16px;
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r8);
+  color:var(--text);font-size:14px;font-family:var(--sans);outline:none;
+  transition:border-color 0.15s;
+}
+.gloss-search:focus{border-color:var(--blue)}
+.gloss-search::placeholder{color:var(--muted2)}
+.gloss-cat-title{
+  font-size:10px;text-transform:uppercase;letter-spacing:0.12em;
+  color:var(--muted);font-weight:600;font-family:var(--mono);
+  padding:20px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px;
+}
+.gterm{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r8);
+  overflow:hidden;margin-bottom:6px;
+}
+.gterm-btn{
+  width:100%;background:none;border:none;padding:13px 18px;
+  text-align:left;color:var(--navy);font-family:var(--mono);font-size:12.5px;font-weight:500;
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  transition:background 0.15s;
+}
+.gterm-btn:hover{background:var(--page)}
+.gterm-arr{font-size:10px;color:var(--muted);transition:transform 0.2s}
+.gterm-btn.open .gterm-arr{transform:rotate(180deg)}
+.gterm-def{display:none;padding:0 18px 14px;font-size:13px;color:var(--text2);line-height:1.7;border-top:1px solid var(--border);background:#fafbfc}
+.gterm-def.open{display:block}
+.gterm-def p{margin-top:12px}
+.gterm.hidden{display:none}
+
+
+/* VISUAL DIAGRAMS */
+.vis-block{background:var(--white);border:1px solid var(--border);border-radius:var(--r12);padding:24px;margin-bottom:28px;overflow-x:auto}
+.vis-caption{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;font-style:italic}
+
+/* SECTION EXPLAINER */
+.sec-explainer{
+  background:var(--navy);
+  border-radius:var(--r12);
+  padding:20px 24px;
+  margin-bottom:32px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:16px;
+  align-items:start;
+}
+.sec-explainer-icon{
+  width:36px;height:36px;border-radius:var(--r8);
+  background:rgba(79,142,247,0.2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.sec-explainer-icon svg{width:18px;height:18px;stroke:#4f8ef7;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sec-explainer h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:5px}
+.sec-explainer p{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.65}
+.sec-explainer strong{color:rgba(255,255,255,0.8);font-weight:500}
+
+/* TWO-COL layout for visual + text */
+.split-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;align-items:start}
+@media(max-width:860px){.split-row{grid-template-columns:1fr}}
+
+/* CONCLUSION */
+.concl-hero{
+  background:var(--navy);border-radius:var(--r12);
+  padding:36px 40px;margin-bottom:32px;
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+}
+.concl-hero-text h2{font-size:20px;font-weight:600;color:#fff;margin-bottom:8px;line-height:1.3}
+.concl-hero-text p{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.7;max-width:520px}
+.concl-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:var(--r8);overflow:hidden;flex-shrink:0}
+.concl-stat{
+  background:rgba(255,255,255,0.06);
+  padding:16px 20px;text-align:center;
+}
+.concl-stat-num{font-family:var(--mono);font-size:22px;font-weight:600;color:#fff;line-height:1}
+.concl-stat-label{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px}
+
+.finding-row{
+  display:grid;grid-template-columns:auto 1fr;gap:20px;
+  padding:20px 24px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r12);margin-bottom:12px;
+  align-items:start;
+}
+.finding-icon{
+  width:40px;height:40px;border-radius:var(--r8);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.finding-icon svg{width:20px;height:20px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.fi-critical{background:#fef2f2}.fi-critical svg{stroke:#dc2626}
+.fi-high{background:#fff7ed}.fi-high svg{stroke:#ea580c}
+.fi-ok{background:#f0fdf4}.fi-ok svg{stroke:#16a34a}
+.fi-info{background:#eff4ff}.fi-info svg{stroke:#2563eb}
+.finding-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.finding-body{font-size:13px;color:var(--muted);line-height:1.65}
+.finding-body strong{color:var(--text2);font-weight:500}
+
+.next-step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px}
+.next-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r12);
+  padding:20px;display:flex;flex-direction:column;gap:10px;
+}
+.next-card-phase{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+}
+.next-card h4{font-size:13px;font-weight:600;color:var(--navy)}
+.next-card p{font-size:12px;color:var(--muted);line-height:1.6}
+.phase-now .next-card-phase{color:var(--critical-text)}
+.phase-near .next-card-phase{color:#9a3412}
+.phase-mid .next-card-phase{color:var(--blue)}
+.phase-ongoing .next-card-phase{color:#166534}
+
+.concl-sign{
+  background:var(--surface2);border-radius:var(--r12);
+  padding:24px 28px;margin-top:8px;
+  display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+}
+.concl-sign p{font-size:13px;color:var(--muted);line-height:1.65}
+.concl-sign strong{color:var(--text);font-weight:500}
+.concl-sign-stamp{
+  font-family:var(--mono);font-size:10px;color:var(--muted2);
+  text-align:right;line-height:1.8;flex-shrink:0;white-space:nowrap;
+}
+
+/* misc */
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+.info-banner{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--r8);padding:14px 18px;font-size:13px;color:#1e3a8a;margin-bottom:24px;line-height:1.6}
+
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:relative;height:auto}
+  .page-header,.section{padding:24px 20px 40px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="aws-logo">
+      <svg class="aws-smile" viewBox="0 0 60 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Amazon Web Services">
+        <path d="M17.2 13.2c0 .8.1 1.4.2 1.8.2.4.4.9.8 1.4.1.2.2.4.2.5 0 .2-.1.4-.4.6l-1.3.9c-.2.1-.4.2-.5.2-.2 0-.4-.1-.6-.3-.3-.3-.5-.6-.7-1-.2-.4-.4-.8-.6-1.3-1.5 1.8-3.4 2.7-5.7 2.7-1.6 0-2.9-.5-3.8-1.4-.9-.9-1.4-2.2-1.4-3.7 0-1.6.6-2.9 1.7-3.9 1.1-1 2.6-1.5 4.4-1.5.6 0 1.2.1 1.9.2.7.1 1.4.3 2.1.5V8.6c0-1.4-.3-2.4-.9-3-.6-.6-1.6-.9-3-.9-.6 0-1.3.1-2 .3-.7.2-1.4.4-2 .7-.3.1-.5.2-.6.2-.3 0-.4-.2-.4-.6V4c0-.3.1-.5.2-.6.1-.1.4-.3.7-.4.7-.3 1.5-.6 2.4-.8 1-.2 2-.3 3.1-.3 2.4 0 4.1.5 5.2 1.6 1.1 1.1 1.6 2.7 1.6 4.8v6.9zm-7.9 3c.6 0 1.2-.1 1.8-.4.6-.3 1.2-.7 1.6-1.3.3-.4.5-.8.6-1.3.1-.5.2-1 .2-1.7v-.8c-.5-.1-1.1-.2-1.7-.3-.6-.1-1.1-.1-1.7-.1-1.2 0-2.1.2-2.7.7-.6.5-.9 1.2-.9 2.1 0 .8.2 1.5.7 1.9.4.5 1.1.7 2.1.7zm14.6 1.9c-.3 0-.5-.1-.7-.2-.2-.1-.3-.4-.4-.7L19 3.9c-.1-.3-.1-.6-.1-.7 0-.3.1-.4.4-.4h1.8c.4 0 .6.1.7.2.2.1.3.4.4.7l3.2 12.5 2.9-12.5c.1-.3.2-.6.4-.7.2-.1.4-.2.7-.2h1.5c.4 0 .6.1.8.2.2.1.3.4.4.7l3 12.6 3.3-12.6c.1-.3.2-.6.4-.7.2-.1.5-.2.7-.2H40c.3 0 .4.1.4.4 0 .1 0 .2-.1.4L35.7 18c-.1.3-.2.6-.4.7-.2.1-.4.2-.7.2h-1.6c-.4 0-.6-.1-.8-.2-.2-.1-.3-.4-.4-.7l-2.9-12.2L26 18c-.1.3-.2.6-.4.7-.2.1-.4.2-.8.2h-1zm22.5.5c-1 0-1.9-.1-2.9-.4-.9-.3-1.7-.6-2.2-.9-.3-.2-.5-.4-.6-.6-.1-.2-.1-.4-.1-.6v-1.3c0-.4.2-.6.5-.6.1 0 .3 0 .4.1.1.1.3.2.5.3.7.3 1.4.5 2.2.7.8.2 1.5.3 2.3.3 1.2 0 2.2-.2 2.8-.6.7-.4 1-1 1-1.8 0-.5-.2-1-.5-1.3-.4-.4-1-.7-2-1l-2.9-.9c-1.4-.4-2.5-1.1-3.1-2-.6-.9-1-1.9-1-3 0-.9.2-1.7.6-2.4.4-.7.9-1.3 1.6-1.8.7-.5 1.4-.8 2.3-1.1.9-.3 1.8-.4 2.8-.4.5 0 1 0 1.5.1.5.1 1 .2 1.5.3.5.1.9.3 1.3.4.4.2.7.3.9.5.3.2.5.4.6.6.1.2.2.5.2.8v1.2c0 .4-.2.6-.5.6-.2 0-.5-.1-.9-.3-1.3-.6-2.7-.9-4.3-.9-1.1 0-2 .2-2.6.5-.6.4-.9.9-.9 1.7 0 .5.2 1 .6 1.4.4.4 1.1.7 2.2 1.1l2.8.9c1.4.4 2.4 1.1 3 1.9.6.8.9 1.8.9 2.9 0 .9-.2 1.7-.6 2.4-.4.7-1 1.4-1.7 1.9-.7.5-1.5.9-2.5 1.2-1 .3-2 .4-3.1.4z" fill="#FF9900"/>
+        <path d="M51.6 28.4C45.9 32.5 37.7 34.7 30.6 34.7c-10.3 0-19.6-3.8-26.6-10.1-.6-.5-.1-1.2.6-.8 7.6 4.4 16.9 7 26.6 7 6.5 0 13.7-1.4 20.3-4.2.9-.5 1.8.6.7 1.3-.1.1-.1.2 0 0-.1.1-.1.2 0 .1z" fill="#FF9900"/>
+        <path d="M54.1 25.5c-.8-1-.5-1.5.2-.9 0 0 3.1 2.7 3.5 3.4.1.2.1.4-.1.5l-3.4 2.2c-.3.2-.7 0-.6-.3l.4-1c.1-.3.4-.6.7-.7l2.4-1.5-2.3-1.7c-.3-.2-.4-.5-.2-.7l.2-.2c-.1-.1-.3-.2-.4-.3-.1-.1-.3-.3-.4-.5-.1-.1-.1-.2 0-.3z" fill="#FF9900"/>
+      </svg>
+      <div>
+        <div class="aws-wordmark">Amazon Web Services</div>
+        <div class="aws-sub">SOC 2 Compliance</div>
+      </div>
+    </div>
+    <div class="sidebar-logo-tag">Risk Assessment</div>
+    <div class="sidebar-logo-title">Control Mapping Framework</div>
+  </div>
+  <div class="sidebar-section-label">Foundations</div>
+  <button class="nav-item active" onclick="showSection('methodology',this)"><span class="nav-dot"></span>Methodology</button>
+  <button class="nav-item" onclick="showSection('assets',this)"><span class="nav-dot"></span>AWS Assets</button>
+  <button class="nav-item" onclick="showSection('threats',this)"><span class="nav-dot"></span>Threats &amp; Vulnerabilities</button>
+  <div class="sidebar-section-label">Risk &amp; Controls</div>
+  <button class="nav-item" onclick="showSection('register',this)"><span class="nav-dot"></span>Risk Register</button>
+  <button class="nav-item" onclick="showSection('controls',this)"><span class="nav-dot"></span>Control Mapping</button>
+  <button class="nav-item" onclick="showSection('inventory',this)"><span class="nav-dot"></span>Control Inventory</button>
+  <button class="nav-item" onclick="showSection('conclusion',this)"><span class="nav-dot"></span>Assessment Conclusion</button>
+  <div class="sidebar-section-label">Reference</div>
+  <button class="nav-item" onclick="showSection('quiz',this)"><span class="nav-dot"></span>Knowledge Check</button>
+  <button class="nav-item" onclick="showSection('glossary',this)"><span class="nav-dot"></span>Glossary</button>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="main-body">
+  <div class="page-header">
+    <div class="page-header-eyebrow">Amazon Web Services · SOC 2 Compliance Program</div>
+    <h1>Risk Assessment &amp; Control Mapping</h1>
+    <p class="page-header-desc">Identifies, evaluates, and manages risks across critical AWS services, demonstrating how implemented controls satisfy the SOC 2 Trust Services Criteria. Use this reference to understand what each control protects, why it matters for your audit, and how all the pieces connect.</p>
+    <div class="header-meta">
+      <div class="meta-item"><div class="meta-val">10</div><div class="meta-label">Risks documented</div></div>
+      <div class="meta-item"><div class="meta-val">10</div><div class="meta-label">Controls mapped</div></div>
+      <div class="meta-item"><div class="meta-val">3</div><div class="meta-label">TSC categories</div></div>
+      <div class="meta-item"><div class="meta-val">8</div><div class="meta-label">AWS services in scope</div></div>
+      <div class="meta-item"><div class="meta-val">1</div><div class="meta-label">Critical risk</div></div>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <section id="methodology" class="section active">
+    <div class="sec-title">Risk assessment methodology</div>
+    <p class="sec-intro">A structured, six-step approach aligned with SOC 2 Trust Services Criteria ensures every control traces back to a real business risk.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+      <div>
+        <h4>What this section covers</h4>
+        <p>This section walks through the <strong>six-step process</strong> used to conduct the SOC 2 risk assessment. Each step builds on the last: you identify what you have, figure out what could go wrong, measure how bad it would be, assign a rating, put controls in place, and then decide who is responsible for keeping those controls running. The diagram below shows how each step feeds the next.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 720 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:580px;display:block">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#CBD5E1"/></marker>
+        </defs>
+        <!-- boxes -->
+        <rect x="2" y="20" width="100" height="60" rx="8" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="52" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">01</text>
+        <text x="52" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Identify</text>
+        <text x="52" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">assets</text>
+
+        <line x1="102" y1="50" x2="118" y2="50" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect x="120" y="20" width="100" height="60" rx="8" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="170" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">02</text>
+        <text x="170" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Identify</text>
+        <text x="170" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">threats</text>
+
+        <line x1="220" y1="50" x2="236" y2="50" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect x="238" y="20" width="100" height="60" rx="8" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="288" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">03</text>
+        <text x="288" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Evaluate</text>
+        <text x="288" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">impact</text>
+
+        <line x1="338" y1="50" x2="354" y2="50" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect x="356" y="20" width="100" height="60" rx="8" fill="#FEF3C7" stroke="#FDE68A" stroke-width="1"/>
+        <text x="406" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#92400E" font-family="Inter,sans-serif">04</text>
+        <text x="406" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Assign</text>
+        <text x="406" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">ratings</text>
+
+        <line x1="456" y1="50" x2="472" y2="50" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect x="474" y="20" width="100" height="60" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="524" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#166534" font-family="Inter,sans-serif">05</text>
+        <text x="524" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Map</text>
+        <text x="524" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">controls</text>
+
+        <line x1="574" y1="50" x2="590" y2="50" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <rect x="592" y="20" width="126" height="60" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="655" y="46" text-anchor="middle" font-size="9" font-weight="600" fill="#166534" font-family="Inter,sans-serif">06</text>
+        <text x="655" y="58" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Assign owners</text>
+        <text x="655" y="70" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">&amp; monitor</text>
+      </svg>
+      <p class="vis-caption">The six steps flow left to right. Steps 1-3 build the picture; step 4 prioritizes; steps 5-6 put controls in place and keep them running.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Identify critical AWS assets and services</h3>
+          <p>Catalogue every AWS service that supports core operations or stores, processes, or transmits sensitive data. These assets define the scope boundary for the entire assessment.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Identify threats and vulnerabilities</h3>
+          <p>Examine each asset for internal threats (misconfiguration, excessive permissions, human error) and external threats (credential theft, denial-of-service attacks, cyberattacks) using security reviews and industry threat intelligence.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Evaluate likelihood and business impact</h3>
+          <p>Rate each risk on two axes: how probable is the event (Low / Medium / High), and how severe would the consequence be if it materialized, ranging from limited disruption to significant compliance or financial impact.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Assign risk ratings</h3>
+          <p>Combine likelihood and impact to produce an overall rating of Medium, High, or Critical. This drives prioritization and resource allocation decisions across the compliance program.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Map mitigating controls</h3>
+          <p>Link each risk to the AWS-native and administrative controls that reduce it. Controls may be preventive (block the event), detective (identify it quickly), or corrective (respond and recover).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div></div>
+        <div>
+          <h3>Establish ownership and monitoring</h3>
+          <p>Assign a named owner to every control and define its execution frequency. Continuous automated controls and scheduled manual reviews together form comprehensive coverage.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="sec-title" style="font-size:15px;margin-bottom:16px">Rating definitions</div>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-label"><span class="badge badge-critical">CRITICAL</span></div>
+        <div class="card-val" style="margin-top:8px">High likelihood combined with High impact. Immediate remediation required. All available resources must be directed here first.</div>
+      </div>
+      <div class="card">
+        <div class="card-label"><span class="badge badge-high">HIGH</span></div>
+        <div class="card-val" style="margin-top:8px">Significant exposure that is likely to affect security, availability, or confidentiality. Remediate promptly as part of the near-term roadmap.</div>
+      </div>
+      <div class="card">
+        <div class="card-label"><span class="badge badge-medium">MEDIUM</span></div>
+        <div class="card-val" style="margin-top:8px">Moderate operational exposure. Existing controls provide partial mitigation. Monitor, schedule improvements, and document acceptance where applicable.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASSETS -->
+  <section id="assets" class="section">
+    <div class="sec-title">Critical AWS assets in scope</div>
+    <p class="sec-intro">Eight services were identified as supporting critical business operations. Criticality reflects the potential blast radius if the service were compromised or unavailable.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div>
+        <h4>Why we scope AWS services first</h4>
+        <p>Before you can assess risk, you need to know <strong>exactly what is in scope</strong>. This inventory lists every AWS service that stores, processes, or transmits data the organization is responsible for. Services rated <strong>Critical</strong> are the ones where a failure or breach would most directly harm customers or violate SOC 2 commitments. Services rated <strong>High</strong> support critical ones and must be protected even if they do not hold data directly.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:520px;display:block">
+        <!-- legend -->
+        <rect x="530" y="12" width="12" height="12" rx="3" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="548" y="22" font-size="10" fill="#6B7280" font-family="Inter,sans-serif">Critical</text>
+        <rect x="608" y="12" width="12" height="12" rx="3" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="626" y="22" font-size="10" fill="#6B7280" font-family="Inter,sans-serif">High</text>
+
+        <!-- row 1: Critical services -->
+        <text x="10" y="58" font-size="10" fill="#9CA3AF" font-family="Inter,sans-serif" font-weight="600" letter-spacing="0.08em">CRITICAL SERVICES</text>
+        <!-- IAM -->
+        <rect x="10" y="66" width="112" height="46" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="66" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">IAM</text>
+        <text x="66" y="101" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">Access Control</text>
+        <!-- S3 -->
+        <rect x="130" y="66" width="112" height="46" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="186" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">Amazon S3</text>
+        <text x="186" y="101" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">Data Storage</text>
+        <!-- EC2 -->
+        <rect x="250" y="66" width="112" height="46" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="306" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">Amazon EC2</text>
+        <text x="306" y="101" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">App Hosting</text>
+        <!-- KMS -->
+        <rect x="370" y="66" width="112" height="46" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="426" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">AWS KMS</text>
+        <text x="426" y="101" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">Key Management</text>
+        <!-- VPC -->
+        <rect x="490" y="66" width="112" height="46" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="546" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">VPC</text>
+        <text x="546" y="101" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">Network Security</text>
+
+        <!-- row 2: High services -->
+        <text x="10" y="140" font-size="10" fill="#9CA3AF" font-family="Inter,sans-serif" font-weight="600" letter-spacing="0.08em">HIGH SERVICES</text>
+        <!-- CloudTrail -->
+        <rect x="10" y="148" width="150" height="28" rx="6" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="85" y="166" text-anchor="middle" font-size="10.5" font-weight="600" fill="#9A3412" font-family="Inter,sans-serif">CloudTrail</text>
+        <!-- Config -->
+        <rect x="168" y="148" width="150" height="28" rx="6" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="243" y="166" text-anchor="middle" font-size="10.5" font-weight="600" fill="#9A3412" font-family="Inter,sans-serif">AWS Config</text>
+        <!-- Backup -->
+        <rect x="326" y="148" width="150" height="28" rx="6" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="401" y="166" text-anchor="middle" font-size="10.5" font-weight="600" fill="#9A3412" font-family="Inter,sans-serif">AWS Backup</text>
+      </svg>
+      <p class="vis-caption">Five services are Critical (direct data or access exposure); three are High (support and audit functions). All eight are evaluated for threats in the next section.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Service</th><th>Business function</th><th>Criticality</th><th>Primary SOC 2 domain</th></tr></thead>
+        <tbody>
+          <tr><td class="td-primary">IAM</td><td>Identity and access management</td><td><span class="badge badge-critical">Critical</span></td><td class="td-mono">CC6.x (Security)</td></tr>
+          <tr><td class="td-primary">Amazon S3</td><td>Data storage</td><td><span class="badge badge-critical">Critical</span></td><td class="td-mono">C1.x (Confidentiality)</td></tr>
+          <tr><td class="td-primary">Amazon EC2</td><td>Application hosting</td><td><span class="badge badge-critical">Critical</span></td><td class="td-mono">A1.x (Availability)</td></tr>
+          <tr><td class="td-primary">AWS KMS</td><td>Encryption key management</td><td><span class="badge badge-critical">Critical</span></td><td class="td-mono">C1.x (Confidentiality)</td></tr>
+          <tr><td class="td-primary">VPC</td><td>Network security and segmentation</td><td><span class="badge badge-critical">Critical</span></td><td class="td-mono">CC6.x (Security)</td></tr>
+          <tr><td class="td-primary">CloudTrail</td><td>Audit logging and API monitoring</td><td><span class="badge badge-high">High</span></td><td class="td-mono">CC7.x (Monitoring)</td></tr>
+          <tr><td class="td-primary">AWS Config</td><td>Configuration compliance monitoring</td><td><span class="badge badge-high">High</span></td><td class="td-mono">CC7.x (Monitoring)</td></tr>
+          <tr><td class="td-primary">AWS Backup</td><td>Backup and disaster recovery</td><td><span class="badge badge-high">High</span></td><td class="td-mono">A1.x (Availability)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Preventive services</div>
+        <div class="card-val">IAM, KMS, and VPC stop unauthorized actions before they occur. They form the first layer of defence and map directly to the Common Criteria access control requirements (CC6.x).</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Detective services</div>
+        <div class="card-val">CloudTrail, AWS Config, and CloudWatch observe everything happening across the environment. Auditors rely heavily on these logs as evidence that monitoring is active and effective (CC7.x).</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Corrective services</div>
+        <div class="card-val">AWS Backup enables recovery when incidents occur. EC2 Auto Scaling and Multi-AZ deployments maintain availability during failures, directly satisfying Availability criteria (A1.x).</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Data protection services</div>
+        <div class="card-val">S3 server-side encryption combined with KMS key management addresses the Confidentiality criteria (C1.x) by ensuring sensitive data is protected both at rest and during transmission.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREATS -->
+  <section id="threats" class="section">
+    <div class="sec-title">Threats and vulnerabilities</div>
+    <p class="sec-intro">Potential threats were identified through security reviews, AWS best practices, and industry threat intelligence. Click any service to see the full analysis.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div>
+        <h4>Threats vs. vulnerabilities — what is the difference?</h4>
+        <p>A <strong>threat</strong> is the bad thing that could happen (for example, someone stealing data). A <strong>vulnerability</strong> is the weakness that makes the threat possible (for example, a publicly accessible S3 bucket). A threat without a vulnerability cannot cause harm, and a vulnerability without a threat does not need urgent action. The table below pairs each AWS service with its most significant threat and the underlying weakness that enables it. Use this to understand <strong>where your exposure actually sits</strong> and what to fix first.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:500px;display:block">
+        <!-- Threat source diagram -->
+        <!-- center: AWS environment -->
+        <rect x="270" y="34" width="140" height="52" rx="10" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1.5"/>
+        <text x="340" y="57" text-anchor="middle" font-size="11" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">AWS Environment</text>
+        <text x="340" y="73" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="Inter,sans-serif">8 services in scope</text>
+
+        <!-- Internal threat box -->
+        <rect x="30" y="10" width="140" height="36" rx="8" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="100" y="31" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A" font-family="Inter,sans-serif">Internal Threats</text>
+        <rect x="30" y="52" width="140" height="36" rx="8" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="100" y="73" text-anchor="middle" font-size="10" fill="#374151" font-family="Inter,sans-serif">Misconfig · Human error</text>
+
+        <!-- External threat box -->
+        <rect x="510" y="10" width="140" height="36" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="580" y="31" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">External Threats</text>
+        <rect x="510" y="52" width="140" height="36" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="580" y="73" text-anchor="middle" font-size="10" fill="#374151" font-family="Inter,sans-serif">Cyberattacks · DoS</text>
+
+        <!-- arrows -->
+        <line x1="170" y1="60" x2="265" y2="60" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="510" y1="60" x2="415" y2="60" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- labels -->
+        <text x="200" y="54" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="Inter,sans-serif">Excessive perms</text>
+        <text x="200" y="68" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="Inter,sans-serif">Privilege escalation</text>
+        <text x="468" y="54" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="Inter,sans-serif">Credential theft</text>
+        <text x="468" y="68" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="Inter,sans-serif">Data exfiltration</text>
+      </svg>
+      <p class="vis-caption">Threats reach your AWS environment from two directions. Internal threats come from within the organization; external threats come from outside actors. Both require different control strategies.</p>
+    </div>
+
+    <div id="threat-acc"></div>
+  </section>
+
+  <!-- RISK REGISTER -->
+  <section id="register" class="section">
+    <div class="sec-title">Risk register</div>
+    <p class="sec-intro">Ten risks documented across the AWS environment. Each row shows the full picture: service, description, likelihood, impact, overall rating, controls, and owner. Click any row to expand details.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div>
+        <h4>How to read this register</h4>
+        <p>Each row is one identified risk. <strong>Likelihood</strong> tells you how probable the event is; <strong>Impact</strong> tells you how bad it would be if it happened. Together they produce the <strong>Rating</strong>. The single Critical risk (R-002, missing MFA) sits at the top of the remediation queue because both its likelihood and impact are High. Click any row to expand the full context, the specific mitigating controls already in place, and the team member who owns it. Use the filter buttons to focus on a specific severity level.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;display:block;margin:0 auto">
+        <!-- Risk matrix grid -->
+        <text x="210" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#0F2044" font-family="Inter,sans-serif">Risk Rating Matrix</text>
+        <!-- Axis labels -->
+        <text x="20" y="110" text-anchor="middle" font-size="10" fill="#6B7280" font-family="Inter,sans-serif" transform="rotate(-90,20,110)">LIKELIHOOD</text>
+        <text x="210" y="198" text-anchor="middle" font-size="10" fill="#6B7280" font-family="Inter,sans-serif">IMPACT</text>
+        <!-- row labels -->
+        <text x="46" y="67" text-anchor="end" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">High</text>
+        <text x="46" y="117" text-anchor="end" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Med</text>
+        <text x="46" y="167" text-anchor="end" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Low</text>
+        <!-- col labels -->
+        <text x="108" y="192" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Low</text>
+        <text x="218" y="192" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Medium</text>
+        <text x="328" y="192" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">High</text>
+        <!-- grid cells -->
+        <!-- row High -->
+        <rect x="52" y="38" width="110" height="50" rx="4" fill="#FEFCE8" stroke="#FDE047" stroke-width="1"/>
+        <text x="107" y="66" text-anchor="middle" font-size="9" fill="#854D0E" font-family="Inter,sans-serif">Medium</text>
+        <rect x="164" y="38" width="110" height="50" rx="4" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="219" y="66" text-anchor="middle" font-size="9" fill="#9A3412" font-family="Inter,sans-serif">High</text>
+        <rect x="276" y="38" width="110" height="50" rx="4" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+        <text x="331" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="#991B1B" font-family="Inter,sans-serif">CRITICAL</text>
+        <!-- row Med -->
+        <rect x="52" y="90" width="110" height="50" rx="4" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="107" y="118" text-anchor="middle" font-size="9" fill="#166534" font-family="Inter,sans-serif">Low</text>
+        <rect x="164" y="90" width="110" height="50" rx="4" fill="#FEFCE8" stroke="#FDE047" stroke-width="1"/>
+        <text x="219" y="118" text-anchor="middle" font-size="9" fill="#854D0E" font-family="Inter,sans-serif">Medium</text>
+        <rect x="276" y="90" width="110" height="50" rx="4" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="331" y="118" text-anchor="middle" font-size="9" fill="#9A3412" font-family="Inter,sans-serif">High</text>
+        <!-- row Low -->
+        <rect x="52" y="142" width="110" height="50" rx="4" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="107" y="170" text-anchor="middle" font-size="9" fill="#166534" font-family="Inter,sans-serif">Low</text>
+        <rect x="164" y="142" width="110" height="50" rx="4" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="219" y="170" text-anchor="middle" font-size="9" fill="#166534" font-family="Inter,sans-serif">Low</text>
+        <rect x="276" y="142" width="110" height="50" rx="4" fill="#FEFCE8" stroke="#FDE047" stroke-width="1"/>
+        <text x="331" y="170" text-anchor="middle" font-size="9" fill="#854D0E" font-family="Inter,sans-serif">Medium</text>
+        <!-- risk dots -->
+        <circle cx="331" cy="63" r="14" fill="#991B1B" fill-opacity="0.15" stroke="#991B1B" stroke-width="1.5"/>
+        <text x="331" y="67" text-anchor="middle" font-size="9" font-weight="700" fill="#991B1B" font-family="Inter,sans-serif">R-002</text>
+      </svg>
+      <p class="vis-caption">The matrix shows how Likelihood and Impact combine to produce a rating. R-002 (the only Critical risk) sits in the top-right cell: High likelihood and High impact.</p>
+    </div>
+
+    <div class="risk-filters" id="risk-filters"></div>
+
+    <div class="tbl-wrap">
+      <table id="risk-table">
+        <thead>
+          <tr>
+            <th style="width:72px">ID</th>
+            <th style="width:110px">Service</th>
+            <th>Risk description</th>
+            <th style="width:92px">Likelihood</th>
+            <th style="width:80px">Impact</th>
+            <th style="width:90px">Rating</th>
+            <th style="width:100px">Owner</th>
+          </tr>
+        </thead>
+        <tbody id="risk-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONTROL MAPPING -->
+  <section id="controls" class="section">
+    <div class="sec-title">SOC 2 control mapping</div>
+    <p class="sec-intro">AWS controls are mapped to three Trust Services Criteria categories. Select a category to see how each service satisfies those specific requirements.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div>
+        <h4>What control mapping means for your audit</h4>
+        <p>A SOC 2 auditor will ask: "Show me the evidence that this criterion is being met." Control mapping is how you answer that question in advance. Each AWS service or configuration is linked to a specific Trust Services Criteria (TSC) reference number. <strong>Security (CC)</strong> is required in every SOC 2 engagement. <strong>Availability (A)</strong> and <strong>Confidentiality (C)</strong> are included here because they are part of this organization's commitments to customers. The tabs below let you see each domain separately or the combined relationships that cover multiple criteria at once.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 680 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:500px;display:block">
+        <!-- three TSC pillars -->
+        <rect x="10" y="20" width="200" height="90" rx="10" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1.5"/>
+        <text x="110" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#1D4ED8" font-family="Inter,sans-serif">Security (CC)</text>
+        <text x="110" y="62" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">IAM · CloudTrail · Config</text>
+        <text x="110" y="76" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">CloudWatch · Security Hub</text>
+        <text x="110" y="90" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">CC6.x · CC7.x · CC8.x</text>
+        <rect x="10" y="112" width="200" height="14" rx="4" fill="#1D4ED8"/>
+        <text x="110" y="123" text-anchor="middle" font-size="9" fill="#fff" font-weight="600" font-family="Inter,sans-serif">MANDATORY</text>
+
+        <rect x="240" y="20" width="200" height="90" rx="10" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+        <text x="340" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#166534" font-family="Inter,sans-serif">Availability (A)</text>
+        <text x="340" y="62" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">EC2 Auto Scaling · Multi-AZ</text>
+        <text x="340" y="76" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">CloudWatch · AWS Backup</text>
+        <text x="340" y="90" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">A1.2 · A1.3</text>
+        <rect x="240" y="112" width="200" height="14" rx="4" fill="#166534"/>
+        <text x="340" y="123" text-anchor="middle" font-size="9" fill="#fff" font-weight="600" font-family="Inter,sans-serif">IN SCOPE</text>
+
+        <rect x="470" y="20" width="200" height="90" rx="10" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+        <text x="570" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#9A3412" font-family="Inter,sans-serif">Confidentiality (C)</text>
+        <text x="570" y="62" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">S3 Encryption · KMS</text>
+        <text x="570" y="76" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Inter,sans-serif">IAM · VPC · CloudTrail</text>
+        <text x="570" y="90" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">C1.1 · C1.2</text>
+        <rect x="470" y="112" width="200" height="14" rx="4" fill="#9A3412"/>
+        <text x="570" y="123" text-anchor="middle" font-size="9" fill="#fff" font-weight="600" font-family="Inter,sans-serif">IN SCOPE</text>
+      </svg>
+      <p class="vis-caption">Three Trust Services Criteria categories are in scope. Security is mandatory in every SOC 2 audit. Availability and Confidentiality reflect this organization's customer commitments.</p>
+    </div>
+
+    <div class="tsc-tabs">
+      <button class="tsc-tab active" onclick="showTSC('security',this)">Security (CC)</button>
+      <button class="tsc-tab" onclick="showTSC('availability',this)">Availability (A)</button>
+      <button class="tsc-tab" onclick="showTSC('confidentiality',this)">Confidentiality (C)</button>
+      <button class="tsc-tab" onclick="showTSC('combined',this)">Combined view</button>
+    </div>
+
+    <div id="tsc-security" class="tsc-panel active">
+      <div class="info-banner">The Security criteria are mandatory in every SOC 2 examination. They evaluate whether systems are protected against unauthorized access, misuse, and compromise through preventive, detective, and corrective controls.</div>
+      <div class="tbl-wrap"><table><thead><tr><th>AWS control</th><th>Criteria</th><th>What it demonstrates</th></tr></thead><tbody id="ctrl-sec-body"></tbody></table></div>
+    </div>
+    <div id="tsc-availability" class="tsc-panel">
+      <div class="info-banner">The Availability criteria evaluate whether systems remain operational and accessible as committed. Evidence must show how the organization handles capacity management, resiliency, and recovery.</div>
+      <div class="tbl-wrap"><table><thead><tr><th>AWS control</th><th>Criteria</th><th>What it demonstrates</th></tr></thead><tbody id="ctrl-avail-body"></tbody></table></div>
+    </div>
+    <div id="tsc-confidentiality" class="tsc-panel">
+      <div class="info-banner">The Confidentiality criteria focus on protecting sensitive information from unauthorized disclosure. Controls must span the full data lifecycle, from collection through deletion.</div>
+      <div class="tbl-wrap"><table><thead><tr><th>AWS control</th><th>Criteria</th><th>What it demonstrates</th></tr></thead><tbody id="ctrl-conf-body"></tbody></table></div>
+    </div>
+    <div id="tsc-combined" class="tsc-panel">
+      <div class="info-banner">Many SOC 2 requirements are met through combinations of preventive, detective, and corrective controls working together. This view shows the key multi-service relationships.</div>
+      <div class="tbl-wrap"><table><thead><tr><th>AWS controls (combined)</th><th>Criteria</th><th>Purpose</th></tr></thead><tbody id="ctrl-comb-body"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CONTROL INVENTORY -->
+  <section id="inventory" class="section">
+    <div class="sec-title">Control inventory</div>
+    <p class="sec-intro">The central register of all implemented controls. Each entry links AWS services to risks and Trust Services Criteria, and specifies owner and execution frequency.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div>
+        <h4>How controls are structured</h4>
+        <p>Every control in this register has four defining attributes. <strong>Frequency</strong> tells you how often the control runs — continuous controls (like MFA enforcement) are always active, while periodic ones (like quarterly access reviews) run on a schedule. <strong>Owner</strong> is the person accountable if the control fails. <strong>Related risks</strong> links the control back to the risk register so you can trace the chain. <strong>Criteria</strong> is the SOC 2 reference the auditor will check this control against. A control without a clear owner or defined frequency is not a reliable control.</p>
+      </div>
+    </div>
+
+    <div class="vis-block">
+      <svg viewBox="0 0 680 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:500px;display:block">
+        <!-- frequency legend -->
+        <text x="10" y="20" font-size="10" font-weight="600" fill="#0F2044" font-family="Inter,sans-serif">Control frequency types in this inventory</text>
+        <!-- Continuous -->
+        <rect x="10" y="30" width="120" height="36" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+        <text x="70" y="50" text-anchor="middle" font-size="10" font-weight="600" fill="#166534" font-family="Inter,sans-serif">Continuous</text>
+        <text x="70" y="62" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Always-on (5 controls)</text>
+        <!-- Daily -->
+        <rect x="140" y="30" width="120" height="36" rx="6" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="200" y="50" text-anchor="middle" font-size="10" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">Daily</text>
+        <text x="200" y="62" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Every day (1 control)</text>
+        <!-- Weekly -->
+        <rect x="270" y="30" width="120" height="36" rx="6" fill="#EFF4FF" stroke="#BFCFFF" stroke-width="1"/>
+        <text x="330" y="50" text-anchor="middle" font-size="10" font-weight="600" fill="#1D4ED8" font-family="Inter,sans-serif">Weekly</text>
+        <text x="330" y="62" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Each week (1 control)</text>
+        <!-- Quarterly -->
+        <rect x="400" y="30" width="120" height="36" rx="6" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+        <text x="460" y="50" text-anchor="middle" font-size="10" font-weight="600" fill="#9A3412" font-family="Inter,sans-serif">Quarterly</text>
+        <text x="460" y="62" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">4x per year (3 controls)</text>
+        <!-- Annual -->
+        <rect x="530" y="30" width="120" height="36" rx="6" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+        <text x="590" y="50" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B" font-family="Inter,sans-serif">Annually</text>
+        <text x="590" y="62" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Once per year (1 control)</text>
+      </svg>
+      <p class="vis-caption">Five controls run continuously via AWS automation. The remaining five are scheduled human-led reviews. SOC 2 auditors expect to see evidence from both types across the full audit period.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:90px">Control ID</th><th>Control name</th><th style="width:110px">Service</th><th style="width:90px">Frequency</th><th style="width:120px">Owner</th><th style="width:110px">Criteria</th></tr></thead>
+        <tbody id="inv-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section id="conclusion" class="section">
+
+    <div class="concl-hero">
+      <div class="concl-hero-text">
+        <h2>Assessment complete. The AWS environment has an established SOC 2 control foundation.</h2>
+        <p>This risk assessment confirms that all ten identified risks have mitigating controls in place and are traceable to SOC 2 Trust Services Criteria. One Critical risk requires immediate prioritization. The control inventory is complete with defined ownership and monitoring frequencies across all three TSC categories in scope.</p>
+      </div>
+      <div class="concl-stat-grid">
+        <div class="concl-stat"><div class="concl-stat-num">10</div><div class="concl-stat-label">Risks assessed</div></div>
+        <div class="concl-stat"><div class="concl-stat-num">10</div><div class="concl-stat-label">Controls active</div></div>
+        <div class="concl-stat"><div class="concl-stat-num">100%</div><div class="concl-stat-label">TSC coverage</div></div>
+        <div class="concl-stat"><div class="concl-stat-num">1</div><div class="concl-stat-label">Critical open</div></div>
+        <div class="concl-stat"><div class="concl-stat-num">8</div><div class="concl-stat-label">High or below</div></div>
+        <div class="concl-stat"><div class="concl-stat-num">3</div><div class="concl-stat-label">TSC domains</div></div>
+      </div>
+    </div>
+
+    <div class="sec-title" style="margin-bottom:6px">Key findings</div>
+    <p class="sec-intro">Four findings shape the overall posture of this assessment and define what must happen before a SOC 2 audit period begins.</p>
+
+    <div class="finding-row">
+      <div class="finding-icon fi-critical">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div>
+        <div class="finding-title">R-002 requires immediate remediation before the audit period opens</div>
+        <div class="finding-body">The absence of mandatory Multi-Factor Authentication on privileged IAM accounts was rated <strong>Critical</strong> because both its likelihood and impact are High. A single compromised password without MFA is sufficient to expose the entire AWS environment. This is the only Critical-rated risk in the register and must be closed before evidence collection begins. The fix is well-defined: enforce MFA via IAM policy and, at the organizational level, via a Service Control Policy that cannot be overridden by account admins.</div>
+      </div>
+    </div>
+
+    <div class="finding-row">
+      <div class="finding-icon fi-high">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div>
+        <div class="finding-title">Five High-rated risks share a common root cause: insufficient access and network controls</div>
+        <div class="finding-body">Risks R-001 (S3 public access), R-003 (EC2 outage), R-007 (VPC misconfiguration), R-008 (backup recovery failure), and R-010 (missing MFA on standard accounts) are all rated High. While controls exist for each, they depend on <strong>human review cycles</strong> that run quarterly or annually. The gap between review cycles is where drift accumulates. Increasing the frequency of automated checks using AWS Config Rules and Security Hub findings will reduce residual risk across all five without adding manual workload.</div>
+      </div>
+    </div>
+
+    <div class="finding-row">
+      <div class="finding-icon fi-ok">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="finding-title">All three TSC categories have active controls and documented ownership</div>
+        <div class="finding-body">Security (CC6.x, CC7.x, CC8.x), Availability (A1.2, A1.3), and Confidentiality (C1.1, C1.2) each have AWS-native controls mapped and an assigned owner. No TSC category in scope lacks coverage. Five controls run continuously via automation, providing real-time evidence generation. This is a strong starting position for a SOC 2 Type II audit: <strong>the control framework exists and is operational</strong>. The audit period will test whether controls operated consistently, not whether they were designed correctly.</div>
+      </div>
+    </div>
+
+    <div class="finding-row">
+      <div class="finding-icon fi-info">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </div>
+      <div>
+        <div class="finding-title">Disaster recovery testing is the highest-risk annual control</div>
+        <div class="finding-body">CTRL-007 (Disaster Recovery Testing) runs only once per year, making it the control most likely to produce a finding if it is not executed on schedule or if test results are not formally documented. Auditors treat DR testing failures as indicators of broader process maturity issues. <strong>The next scheduled test should be treated as a dress rehearsal for the audit</strong>, with results documented, exceptions noted, and remediation tracked. Consider moving to semi-annual testing to reduce the risk of a missed or inadequate annual test.</div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sec-title" style="margin-bottom:6px;font-size:16px">Recommended next steps</div>
+    <p class="sec-intro" style="margin-bottom:20px">Four phases of work to move from this assessment to a clean SOC 2 Type II opinion.</p>
+
+    <div class="next-step-grid">
+      <div class="next-card phase-now">
+        <div class="next-card-phase">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Immediate
+        </div>
+        <h4>Close R-002: enforce MFA</h4>
+        <p>Deploy an IAM policy and SCP that prevents console access without MFA. Validate enforcement across all accounts. Document completion as the first piece of audit evidence.</p>
+      </div>
+
+      <div class="next-card phase-near">
+        <div class="next-card-phase">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Within 30 days
+        </div>
+        <h4>Run baseline control evidence collection</h4>
+        <p>Pull the first evidence set for all 10 controls: Config compliance reports, CloudTrail log exports, IAM access review outputs, and backup job logs. Identify any controls missing evidence.</p>
+      </div>
+
+      <div class="next-card phase-mid">
+        <div class="next-card-phase">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          60 to 90 days
+        </div>
+        <h4>Complete DR test and readiness review</h4>
+        <p>Execute CTRL-007 with formal documentation. Conduct an internal readiness assessment against all TSC criteria to identify any remaining gaps before the audit window opens.</p>
+      </div>
+
+      <div class="next-card phase-ongoing">
+        <div class="next-card-phase">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          Ongoing
+        </div>
+        <h4>Maintain the risk register as a living document</h4>
+        <p>Update this register after each significant infrastructure change, quarterly access review, and DR test. New services added to the AWS environment must be assessed before production use.</p>
+      </div>
+    </div>
+
+    <div class="vis-block" style="margin-bottom:28px">
+      <svg viewBox="0 0 680 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:520px;display:block">
+        <defs>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#CBD5E1"/></marker>
+        </defs>
+        <text x="10" y="18" font-size="10" font-weight="600" fill="#0F2044" font-family="Inter,sans-serif">SOC 2 readiness timeline</text>
+        <!-- track -->
+        <line x1="10" y1="58" x2="668" y2="58" stroke="#E2E5EB" stroke-width="2"/>
+        <!-- now -->
+        <circle cx="60" cy="58" r="8" fill="#DC2626"/>
+        <text x="60" y="82" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Now</text>
+        <text x="60" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#DC2626" font-family="Inter,sans-serif">MFA fix</text>
+        <!-- 30d -->
+        <circle cx="200" cy="58" r="8" fill="#EA580C"/>
+        <text x="200" y="82" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">30 days</text>
+        <text x="200" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#EA580C" font-family="Inter,sans-serif">Evidence baseline</text>
+        <!-- 90d -->
+        <circle cx="370" cy="58" r="8" fill="#2563EB"/>
+        <text x="370" y="82" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">90 days</text>
+        <text x="370" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#2563EB" font-family="Inter,sans-serif">DR test + readiness review</text>
+        <!-- audit start -->
+        <circle cx="520" cy="58" r="8" fill="#166534"/>
+        <text x="520" y="82" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">Audit start</text>
+        <text x="520" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#166534" font-family="Inter,sans-serif">Period opens</text>
+        <!-- audit end -->
+        <circle cx="660" cy="58" r="8" fill="#0F2044"/>
+        <text x="660" y="82" text-anchor="middle" font-size="9" fill="#6B7280" font-family="Inter,sans-serif">12 months</text>
+        <text x="660" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#0F2044" font-family="Inter,sans-serif">SOC 2 report</text>
+      </svg>
+      <p class="vis-caption">Resolving R-002 and building a clean evidence baseline before the audit period opens gives the best chance of an unqualified SOC 2 Type II opinion.</p>
+    </div>
+
+    <div class="concl-sign">
+      <p>This assessment was conducted against the <strong>SOC 2 Trust Services Criteria</strong> using AWS-native controls and documented in accordance with AICPA guidance. The risk register, control inventory, and TSC mappings in this document constitute the foundational evidence package for the SOC 2 engagement. All control owners listed are accountable for maintaining evidence and responding to auditor inquiries within their respective domains.</p>
+      <div class="concl-sign-stamp">
+        <div>Amazon Web Services</div>
+        <div>SOC 2 Compliance Program</div>
+        <div style="color:var(--border2);margin-top:4px">Risk Assessment v1.0</div>
+        <div style="color:var(--border2)">Classification: Confidential</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="section">
+    <div class="sec-title">Knowledge check</div>
+    <p class="sec-intro">Eight questions covering risk assessment methodology, control mapping, and SOC 2 criteria. Select an answer to see immediate feedback.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div>
+        <h4>Before you begin</h4>
+        <p>These questions test the key concepts from all six sections. There is no time limit. For each question, <strong>select the best answer</strong> and you will immediately see whether you were right and why. The explanation after each answer references the specific section and risk or control ID so you can go back and review if needed. A score of 6 or higher indicates solid working knowledge of the framework.</p>
+      </div>
+    </div>
+
+    <div id="quiz-container"></div>
+    <div class="quiz-score" id="quiz-score">
+      <div><span class="score-num" id="score-num">0</span><span class="score-denom">/8</span></div>
+      <div class="score-sub" id="score-sub">questions answered correctly</div>
+      <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar" style="width:0%"></div></div>
+      <button class="btn-retry" onclick="initQuiz()">Try again</button>
+    </div>
+  </section>
+
+  <!-- GLOSSARY -->
+  <section id="glossary" class="section">
+    <div class="sec-title">SOC 2 glossary</div>
+    <p class="sec-intro">A complete reference of terms used in SOC 2 engagements, AWS security, and risk management. Click any term to expand its definition.</p>
+
+    <div class="sec-explainer">
+      <div class="sec-explainer-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+      <div>
+        <h4>How to use this glossary</h4>
+        <p>Terms are organized into <strong>eight categories</strong> that match the sections of this document. Use the search box to find any term instantly across all categories. If you encounter an unfamiliar acronym or concept while reviewing the risk register or control mapping sections, look it up here. Definitions are written in plain language and include AWS-specific context where relevant.</p>
+      </div>
+    </div>
+
+    <div class="gloss-bar">
+      <input class="gloss-search" type="text" placeholder="Search terms and definitions..." oninput="filterGloss(this.value)" id="gloss-input">
+    </div>
+    <div id="gloss-body"></div>
+  </section>
+
+  </div><!-- /main-body -->
+
+  <footer class="conf-footer">
+    <div class="conf-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Confidential
+    </div>
+    <div class="conf-text">This document contains proprietary and confidential information belonging to Amazon Web Services. It is intended solely for the use of authorized personnel involved in the SOC 2 compliance program. Unauthorized disclosure, reproduction, or distribution is strictly prohibited.</div>
+  </footer>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+/* DATA */
+const THREATS=[
+  {service:'Amazon S3',threat:'Unauthorized data exposure',vuln:'Public bucket misconfiguration',source:'External',detail:'S3 buckets can be accidentally exposed to the public internet when Block Public Access settings are disabled at the account or bucket level. Sensitive data, including PII and financial records, can be silently exfiltrated without triggering alerts unless CloudTrail logging is active and monitored.',controls:'S3 Block Public Access enforcement, IAM bucket policies, CloudTrail S3 data events'},
+  {service:'IAM',threat:'Privilege escalation',vuln:'Overly permissive roles and policies',source:'Internal',detail:'When IAM roles grant broader permissions than the job function requires, a compromised credential or malicious insider can escalate privileges across the entire environment. IAM Access Analyzer identifies overly permissive policies automatically.',controls:'Least-privilege policy design, IAM Access Analyzer, quarterly access reviews'},
+  {service:'Amazon EC2',threat:'Service disruption and outage',vuln:'Single-instance deployment without redundancy',source:'External',detail:'A single EC2 instance is a single point of failure. Hardware faults, software crashes, AZ-level events, or targeted denial-of-service attacks can take the application offline. Multi-AZ deployments and Auto Scaling groups eliminate this dependency.',controls:'Multi-AZ architecture, EC2 Auto Scaling, health-check based replacement'},
+  {service:'CloudTrail',threat:'Audit trail tampering or deletion',vuln:'Insufficient access controls on CloudTrail trails',source:'Internal',detail:'If an attacker or privileged insider disables CloudTrail or deletes log files, the organization loses its audit evidence, making post-incident investigation impossible and creating a material SOC 2 finding. Log file validation and S3 Object Lock prevent tampering.',controls:'CloudTrail log file validation, S3 MFA Delete, restricted trail admin access'},
+  {service:'AWS KMS',threat:'Encryption key compromise',vuln:'Weak key management practices',source:'Internal',detail:'Customer Master Keys (CMKs) with overly broad key policies or without automatic rotation can be misused or exposed. All KMS API calls are recorded in CloudTrail, providing an audit trail for key usage. Regular rotation limits the exposure window if a key is compromised.',controls:'Automatic key rotation, least-privilege KMS key policies, CloudTrail KMS event logging'},
+  {service:'VPC',threat:'Network exposure of internal resources',vuln:'Overly permissive security groups or NACLs',source:'External',detail:'Security groups that permit unrestricted inbound traffic (0.0.0.0/0) on sensitive ports expose internal resources to the internet. Strict security group rules, private subnets, and NACL deny rules limit the attack surface and contain the blast radius of any perimeter breach.',controls:'Restrictive security group rules, private subnet architecture, NACL deny rules, VPC Flow Logs'},
+  {service:'AWS Config',threat:'Undetected configuration drift',vuln:'Resources diverging from approved baselines',source:'Internal',detail:'Resources frequently drift from their approved configuration through manual changes, automation errors, or deliberate modification. Without continuous monitoring, gaps accumulate and go undetected until an incident or audit surfaces them. Config Rules evaluate resources automatically.',controls:'AWS Config managed rules, custom Config rules, SNS alerts on non-compliance'},
+  {service:'AWS Backup',threat:'Recovery failure during a disaster',vuln:'Untested or incomplete backup procedures',source:'External',detail:'Backups that are never tested may fail silently or incompletely when recovery is most critical. Recovery Time Objective (RTO) and Recovery Point Objective (RPO) commitments are meaningless without documented and tested restore procedures.',controls:'Scheduled backup plans, restore drills, backup job monitoring, cross-region backup copies'},
+];
+
+const RISKS=[
+  {id:'R-001',service:'Amazon S3',desc:'Unauthorized public access to sensitive data stored in S3 buckets',detail:'An improperly configured S3 bucket without Block Public Access enabled could expose confidential customer or business data to the internet. This risk is elevated when bucket policies are not regularly reviewed.',impact:'High',likelihood:'Medium',rating:'High',controls:'S3 Block Public Access, IAM bucket policies, CloudTrail S3 data event logging',owner:'Security Engineer'},
+  {id:'R-002',service:'IAM',desc:'Excessive user permissions or privilege escalation enabling unauthorized actions',detail:'IAM roles or users with permissions beyond their job function create pathways for privilege escalation. Combined with missing MFA, a single compromised credential can lead to full account takeover.',impact:'High',likelihood:'High',rating:'Critical',controls:'Least privilege IAM policies, mandatory MFA, IAM Access Analyzer, quarterly access reviews',owner:'Security Engineer'},
+  {id:'R-003',service:'Amazon EC2',desc:'EC2 service outage disrupting business operations and customer availability',detail:'Single-instance deployments or single-AZ architectures create single points of failure. Hardware faults or AZ-level events can take applications offline beyond RTO commitments.',impact:'High',likelihood:'Medium',rating:'High',controls:'EC2 Auto Scaling, Multi-AZ deployment, regular backup and DR testing',owner:'Cloud Architect'},
+  {id:'R-004',service:'AWS Config',desc:'Configuration drift creating undetected security gaps in AWS resources',detail:'Resource configurations diverging from approved baselines (e.g., security groups opening new ports) create exposure that may not be noticed until an audit or incident. Continuous monitoring is required.',impact:'Medium',likelihood:'Medium',rating:'Medium',controls:'AWS Config Rules, SNS alerting on non-compliance, change management procedures',owner:'Cloud Architect'},
+  {id:'R-005',service:'CloudTrail',desc:'Audit logging disabled or tampered with by unauthorized users',detail:'Loss of CloudTrail coverage creates blind spots in incident response and removes critical SOC 2 audit evidence. Attackers often disable logging as a first step after gaining access.',impact:'High',likelihood:'Low',rating:'Medium',controls:'CloudTrail log file validation, S3 Object Lock, restricted admin access to trails',owner:'Security Engineer'},
+  {id:'R-006',service:'AWS KMS',desc:'Encryption key compromise or improper management exposing sensitive data',detail:'Keys without rotation schedules or with overly permissive policies increase the window of exposure if a key is disclosed. Improper key deletion can also result in permanent data loss.',impact:'High',likelihood:'Low',rating:'Medium',controls:'Automatic key rotation, least-privilege key policies, KMS CloudTrail audit logging',owner:'Security Engineer'},
+  {id:'R-007',service:'VPC',desc:'Network misconfiguration exposing internal resources to unauthorized external access',detail:'Security groups allowing unrestricted inbound traffic (0.0.0.0/0) on ports such as 22 (SSH) or 3389 (RDP) directly expose instances to internet-based attacks. Regular review is essential.',impact:'High',likelihood:'Medium',rating:'High',controls:'Restrictive security groups, private subnets, NACLs, VPC Flow Log monitoring',owner:'Cloud Architect'},
+  {id:'R-008',service:'AWS Backup',desc:'Failure to recover critical systems within committed RTO/RPO during disaster events',detail:'Backups that are not tested regularly may fail during actual recovery scenarios. Without defined and tested RTO/RPO procedures, the organization cannot demonstrate availability commitments.',impact:'High',likelihood:'Medium',rating:'High',controls:'AWS Backup plans, scheduled restore testing, backup monitoring alerts, cross-region copies',owner:'Operations Team'},
+  {id:'R-009',service:'CloudWatch',desc:'Failure to detect security incidents promptly due to insufficient monitoring coverage',detail:'Without comprehensive alerting on security-relevant events (failed logins, privilege changes, unusual API calls), incidents go undetected until customer or external reports surface them.',impact:'Medium',likelihood:'Medium',rating:'Medium',controls:'CloudWatch Alarms, metric filters on CloudTrail logs, incident response procedures',owner:'Security Operations'},
+  {id:'R-010',service:'IAM',desc:'Absence of Multi-Factor Authentication on privileged accounts increasing breach risk',detail:'Accounts with administrative access and no MFA are vulnerable to credential stuffing and phishing. A single stolen password is sufficient to compromise the entire AWS environment without MFA.',impact:'High',likelihood:'Medium',rating:'High',controls:'Mandatory MFA enforcement via IAM policy, SCP MFA enforcement at organization level',owner:'Security Engineer'},
+];
+
+const CTRL_SEC=[
+  {name:'IAM policies',criteria:'CC6.1',desc:'Logical access controls restrict unauthorized access to systems and data'},
+  {name:'IAM roles',criteria:'CC6.2',desc:'Access provisioning and authorization aligned to job function and need-to-know'},
+  {name:'MFA enforcement',criteria:'CC6.3',desc:'Strong multi-factor authentication controls for all privileged and administrative accounts'},
+  {name:'IAM access reviews',criteria:'CC6.6',desc:'Periodic review of access rights to detect and remove excessive permissions'},
+  {name:'CloudTrail logging',criteria:'CC7.1',desc:'Comprehensive security event monitoring across all AWS API calls and console activity'},
+  {name:'CloudTrail log review',criteria:'CC7.2',desc:'Detection and analysis of anomalies and unauthorized activity in audit log data'},
+  {name:'CloudWatch alarms',criteria:'CC7.3',desc:'Real-time alerting on security-relevant metric thresholds and log patterns'},
+  {name:'AWS Config rules',criteria:'CC7.4',desc:'Automated configuration monitoring and alerting on unauthorized changes'},
+  {name:'AWS Security Hub',criteria:'CC7.5',desc:'Centralized vulnerability and threat findings aggregated across services'},
+  {name:'AWS Backup',criteria:'CC8.1',desc:'Recovery and business continuity controls supporting system restoration'},
+  {name:'Incident response procedures',criteria:'CC7.4',desc:'Documented and tested processes for detecting, containing, and recovering from incidents'},
+];
+const CTRL_AVAIL=[
+  {name:'EC2 Auto Scaling',criteria:'A1.2',desc:'Dynamic capacity management responds to demand increases and instance failures automatically'},
+  {name:'Multi-AZ deployment',criteria:'A1.2',desc:'Resources distributed across multiple availability zones eliminate single points of failure'},
+  {name:'AWS Backup',criteria:'A1.3',desc:'Scheduled, monitored backups with tested restore procedures support RTO/RPO commitments'},
+  {name:'CloudWatch monitoring',criteria:'A1.2',desc:'Continuous availability monitoring with alerting on performance degradation and downtime'},
+  {name:'Disaster recovery testing',criteria:'A1.3',desc:'Annual and ad-hoc validation of restoration and failover procedures against defined RTO/RPO'},
+];
+const CTRL_CONF=[
+  {name:'S3 server-side encryption',criteria:'C1.1',desc:'Protects confidential data stored in S3 at rest against unauthorized physical or logical access'},
+  {name:'AWS KMS',criteria:'C1.1',desc:'Centralized encryption key management with rotation, access controls, and audit logging'},
+  {name:'IAM access controls',criteria:'C1.2',desc:'Fine-grained permissions ensure confidential data is accessible only to authorized identities'},
+  {name:'VPC segmentation',criteria:'C1.2',desc:'Network isolation through private subnets prevents lateral movement to confidential resources'},
+  {name:'CloudTrail audit logs',criteria:'C1.2',desc:'Tamper-evident logging of all access to confidential data with integrity validation'},
+];
+const CTRL_COMB=[
+  {name:'IAM + MFA',criteria:'CC6.1, CC6.2, CC6.3',desc:'Combined identity, authorization, and strong authentication for full access management coverage'},
+  {name:'IAM access reviews',criteria:'CC6.6',desc:'Ongoing access governance and least-privilege validation'},
+  {name:'CloudTrail + CloudWatch',criteria:'CC7.1, CC7.2, CC7.3',desc:'End-to-end security monitoring, anomaly detection, and real-time alerting'},
+  {name:'AWS Config + CloudTrail',criteria:'CC7.2, CC7.4',desc:'Configuration compliance monitoring enriched with API-level change audit trail'},
+  {name:'Security Hub',criteria:'CC7.5',desc:'Centralized vulnerability management aggregating findings from GuardDuty, Inspector, and Config'},
+  {name:'S3 encryption + KMS',criteria:'C1.1',desc:'Layered data confidentiality: encryption at rest with centrally managed and rotated keys'},
+  {name:'VPC security groups + NACLs',criteria:'CC6.1, C1.2',desc:'Defense-in-depth network access controls at both instance and subnet layers'},
+  {name:'AWS Backup + DR procedures',criteria:'A1.3, CC8.1',desc:'Business continuity coverage combining automated backup with tested recovery playbooks'},
+  {name:'EC2 Auto Scaling + Multi-AZ',criteria:'A1.2',desc:'System availability and resilience eliminating single points of failure at compute and zone levels'},
+];
+
+const INVENTORY=[
+  {id:'CTRL-001',name:'IAM least privilege review',service:'IAM',desc:'Review user and role permissions to ensure least privilege access across all accounts',freq:'Quarterly',owner:'Security Engineer',risks:'R-002, R-010',criteria:'CC6.1, CC6.2'},
+  {id:'CTRL-002',name:'MFA enforcement',service:'IAM',desc:'Require and validate MFA for all privileged and administrative accounts',freq:'Continuous',owner:'Security Engineer',risks:'R-010',criteria:'CC6.3'},
+  {id:'CTRL-003',name:'S3 public access monitoring',service:'S3',desc:'Verify Block Public Access settings are enforced at account and bucket levels',freq:'Continuous',owner:'Security Engineer',risks:'R-001',criteria:'CC6.1, C1.1'},
+  {id:'CTRL-004',name:'CloudTrail monitoring',service:'CloudTrail',desc:'Monitor and review audit logs daily for anomalous or unauthorized activity',freq:'Daily',owner:'Security Operations',risks:'R-005',criteria:'CC7.1, CC7.2'},
+  {id:'CTRL-005',name:'Configuration compliance monitoring',service:'AWS Config',desc:'Detect unauthorized configuration changes via continuously evaluated Config Rules',freq:'Continuous',owner:'Cloud Architect',risks:'R-004',criteria:'CC7.4'},
+  {id:'CTRL-006',name:'Backup verification',service:'AWS Backup',desc:'Verify backup job success, completeness, and recovery readiness',freq:'Weekly',owner:'Operations Team',risks:'R-008',criteria:'A1.3'},
+  {id:'CTRL-007',name:'Disaster recovery testing',service:'AWS Backup / EC2',desc:'Test full restoration and failover procedures against documented RTO/RPO targets',freq:'Annually',owner:'Cloud Architect',risks:'R-003, R-008',criteria:'A1.3, CC8.1'},
+  {id:'CTRL-008',name:'Key management review',service:'AWS KMS',desc:'Review encryption key usage, rotation status, and access policy configurations',freq:'Quarterly',owner:'Security Engineer',risks:'R-006',criteria:'C1.1'},
+  {id:'CTRL-009',name:'Security event monitoring',service:'CloudWatch',desc:'Monitor and alert on security-relevant events and metric thresholds in real time',freq:'Continuous',owner:'Security Operations',risks:'R-009',criteria:'CC7.3'},
+  {id:'CTRL-010',name:'Network security review',service:'VPC',desc:'Review security group rules, NACLs, and network segmentation configurations',freq:'Quarterly',owner:'Cloud Architect',risks:'R-007',criteria:'CC6.1, C1.2'},
+];
+
+const QUIZ_DATA=[
+  {q:'Which risk received a "Critical" rating in the SOC 2 Risk Register?',opts:['Unauthorized S3 bucket exposure','Excessive IAM permissions combined with missing MFA','EC2 service outage','KMS key compromise'],answer:1,explain:'R-002 (IAM: excessive permissions and missing MFA) was rated Critical due to High likelihood combined with High impact. A single compromised credential without MFA can lead to full account takeover.'},
+  {q:'CloudTrail Logging primarily satisfies which SOC 2 criterion?',opts:['A1.2: Capacity management','C1.1: Confidentiality protection','CC7.1: Security event monitoring','CC6.3: Strong authentication'],answer:2,explain:'CloudTrail maps to CC7.1, the Common Criteria requirement for security event monitoring. It records all AWS API calls and provides the audit trail that SOC 2 auditors rely on for evidence.'},
+  {q:'Which AWS service automatically detects unauthorized configuration changes?',opts:['CloudWatch','AWS Config','AWS Security Hub','CloudTrail'],answer:1,explain:'AWS Config Rules continuously evaluate resource configurations against defined baselines and alert when they drift, satisfying the CC7.4 configuration monitoring requirement.'},
+  {q:'The Availability criteria (A1.x) is primarily satisfied by which combination?',opts:['IAM + MFA','S3 encryption + KMS','EC2 Auto Scaling + Multi-AZ + AWS Backup','VPC security groups + NACLs'],answer:2,explain:'A1.2 covers capacity management and resiliency (Auto Scaling and Multi-AZ), while A1.3 covers recovery capabilities (AWS Backup and DR testing). Together they satisfy the full Availability domain.'},
+  {q:'Who owns Risk R-003 (EC2 Service Outage) in the risk register?',opts:['Security Engineer','Security Operations','Cloud Architect','Operations Team'],answer:2,explain:'R-003 is owned by the Cloud Architect, who is responsible for the Auto Scaling architecture, Multi-AZ deployment design, and DR testing procedures.'},
+  {q:'Which security principle should guide IAM permission assignments to prevent privilege escalation?',opts:['Separation of duties','Least privilege','Defense in depth','Zero trust networking'],answer:1,explain:'Least privilege ensures each user and role has only the permissions required for their specific function. This minimizes the blast radius if credentials are compromised and is directly assessed under CC6.1 and CC6.2.'},
+  {q:'How frequently should CTRL-001 (IAM Least Privilege Review) be performed?',opts:['Daily','Weekly','Monthly','Quarterly'],answer:3,explain:'CTRL-001 is specified as a Quarterly manual control. Continuous automated controls like MFA enforcement complement these periodic human reviews to maintain comprehensive coverage.'},
+  {q:'Which SOC 2 criterion do S3 encryption and AWS KMS together primarily satisfy?',opts:['CC6.1','C1.1','A1.3','CC7.5'],answer:1,explain:'C1.1 requires protection of confidential information. S3 server-side encryption ensures data at rest is protected, while KMS manages the underlying keys with rotation and access controls.'},
+];
+
+/* GLOSSARY DATA */
+const GLOSSARY = {
+  'SOC 2 framework':[
+    {term:'SOC 2',def:'Service Organization Control 2. An auditing standard developed by the American Institute of Certified Public Accountants (AICPA) that evaluates a service organization\'s controls relevant to security, availability, processing integrity, confidentiality, and privacy. SOC 2 reports are widely used by cloud and SaaS companies to demonstrate security posture to customers and prospects.'},
+    {term:'SOC 2 Type I',def:'A point-in-time audit that evaluates whether an organization\'s controls are designed appropriately to meet the applicable Trust Services Criteria. A Type I report confirms the controls exist and are properly designed but does not test whether they operated effectively over time.'},
+    {term:'SOC 2 Type II',def:'An audit covering a defined period (typically 6–12 months) that evaluates both the design and the operating effectiveness of controls. Type II reports are significantly more valuable to customers because they demonstrate sustained, consistent control execution, not just design intent.'},
+    {term:'Trust Services Criteria (TSC)',def:'The framework of control requirements used in SOC 2 audits, developed by the AICPA. Organized into five categories: Security (Common Criteria), Availability, Processing Integrity, Confidentiality, and Privacy. The Security category is required in all SOC 2 engagements; the others are optional based on customer commitments.'},
+    {term:'Common Criteria (CC)',def:'The Security category within the SOC 2 Trust Services Criteria. It is the mandatory foundation of every SOC 2 examination and covers logical access management, threat detection, security monitoring, change management, and risk mitigation. Subcriteria are numbered CC1.x through CC9.x.'},
+    {term:'Availability criteria (A)',def:'The SOC 2 Trust Services Criteria category covering whether systems remain operational and accessible as committed in Service Level Agreements. Subcriteria A1.1 through A1.3 address capacity management, service monitoring, and recovery planning and testing.'},
+    {term:'Confidentiality criteria (C)',def:'The SOC 2 Trust Services Criteria category covering protection of sensitive information from unauthorized disclosure. Criteria C1.1 and C1.2 require that confidential information is identified, encrypted, access-controlled, and ultimately disposed of securely.'},
+    {term:'Processing integrity criteria (PI)',def:'The SOC 2 Trust Services Criteria category addressing whether system processing is complete, valid, accurate, timely, and authorized. Relevant primarily for organizations where data processing accuracy is a core customer commitment (e.g., payment processors).'},
+    {term:'Privacy criteria (P)',def:'The SOC 2 Trust Services Criteria category covering collection, use, retention, disclosure, and disposal of personal information. Based on the AICPA Generally Accepted Privacy Principles (GAPP) and aligns with regulations like GDPR and CCPA.'},
+    {term:'Service organization',def:'The entity being examined in a SOC 2 audit, typically a SaaS company, cloud provider, or managed service provider that processes data on behalf of its customers (user entities). The service organization is responsible for designing and operating the controls being examined.'},
+    {term:'User entity',def:'The customer of a service organization, being the company that relies on the service organization\'s system to process or store its own data. User entities receive SOC 2 reports to assess risk in their vendor relationships and supply chain.'},
+    {term:'Complementary user entity controls (CUECs)',def:'Controls that the service organization\'s SOC 2 report assumes the user entity (customer) will implement to achieve the stated control objectives. CUECs are documented in the report and must be evaluated by the user entity in their own compliance assessments.'},
+    {term:'Subservice organization',def:'A third-party provider used by the service organization to perform part of the services covered by the SOC 2 examination. AWS is a common subservice organization for SaaS companies. Their controls can be addressed using carve-out or inclusive methods in the audit.'},
+    {term:'System description',def:'A written description in a SOC 2 report that explains the service organization\'s system, including the nature of services provided, the principal service commitments, infrastructure, software, people, processes, and data. It provides context for evaluating the controls.'},
+  ],
+  'Risk management':[
+    {term:'Risk assessment',def:'The systematic process of identifying threats and vulnerabilities, evaluating the probability of their occurrence, and estimating their potential business impact. The output is a prioritized list of risks that informs control selection and investment decisions.'},
+    {term:'Risk register',def:'A living document that catalogues identified risks with their likelihood, impact, risk rating, mitigating controls, and assigned owners. It is a central artifact in a risk management program and provides traceability from identified risks to implemented controls.'},
+    {term:'Risk rating',def:'An overall classification (Critical, High, Medium, Low) derived by combining the likelihood and impact scores for a given risk. Ratings drive remediation priority, resource allocation, and escalation decisions.'},
+    {term:'Likelihood',def:'In risk assessment, the probability that a threat event will occur within a given period. Typically rated as Low (unlikely), Medium (possible), or High (probable) based on historical data, threat intelligence, and environmental factors.'},
+    {term:'Impact',def:'The potential consequence to the organization if a risk materializes. Assessed across dimensions including financial exposure, regulatory and compliance penalties, reputational harm, and operational disruption. Rated Low, Medium, or High.'},
+    {term:'Inherent risk',def:'The level of risk that exists before any controls are applied. Inherent risk reflects the raw exposure to a threat given the nature of the environment. It is the starting point before control effectiveness is considered.'},
+    {term:'Residual risk',def:'The risk that remains after controls have been applied. Residual risk is the practical exposure level the organization accepts. SOC 2 auditors assess whether residual risk is within the organization\'s defined risk appetite.'},
+    {term:'Risk appetite',def:'The amount and type of risk an organization is willing to accept in pursuit of its business objectives. Formal risk appetite statements guide decisions about which risks require immediate remediation versus which can be monitored and accepted.'},
+    {term:'Risk tolerance',def:'The acceptable range of variation around a risk objective. While risk appetite defines the overall posture, risk tolerance defines the specific boundaries, for example, acceptable downtime per quarter or maximum data breach notification delay.'},
+    {term:'Threat',def:'Any circumstance or event with the potential to harm an information system or the information it processes. Threats may originate from human actors (malicious or accidental), technical failures, or natural events.'},
+    {term:'Vulnerability',def:'A weakness in a system, process, or control that could be exploited by a threat to cause harm. Vulnerabilities can be technical (unpatched software, misconfigured services) or procedural (lack of access reviews, untested backups).'},
+    {term:'Control deficiency',def:'A situation where a control is absent, poorly designed, or not operating effectively enough to prevent or detect misstatements or unauthorized events. Deficiencies identified during a SOC 2 audit are documented as exceptions or findings.'},
+    {term:'Compensating control',def:'An alternative control that provides equivalent or greater protection when the primary control cannot be implemented as designed. Auditors evaluate whether compensating controls achieve the same control objective.'},
+  ],
+  'Audit and compliance':[
+    {term:'Audit period',def:'The time window covered by a SOC 2 Type II examination, typically 6 or 12 months. Controls must be consistently operating throughout the entire audit period to avoid exceptions. A 12-month period provides stronger assurance than a 6-month period.'},
+    {term:'Audit evidence',def:'Documentation collected to demonstrate that a control is designed appropriately and operating effectively. For AWS-based environments, evidence includes CloudTrail logs, Config compliance reports, access review records, backup logs, and DR test reports.'},
+    {term:'Exception',def:'An instance identified during audit testing where a control did not operate as described. A single exception does not necessarily result in a qualified opinion but must be documented with the organization\'s response and any compensating controls.'},
+    {term:'Qualified opinion',def:'An auditor\'s conclusion that, except for specified issues, the system\'s controls satisfy the applicable Trust Services Criteria. A qualified opinion indicates material control failures and is viewed negatively by customers.'},
+    {term:'Unqualified opinion',def:'A clean SOC 2 opinion indicating that the auditor found no material exceptions and that controls were designed appropriately and operated effectively throughout the audit period. This is the target outcome for all SOC 2 engagements.'},
+    {term:'Management assertion',def:'A formal statement by service organization management that the system description is accurate and that controls were designed and operated effectively as described. It accompanies the SOC 2 report and makes management accountable for the representations.'},
+    {term:'Testing procedure',def:'The specific method an auditor uses to evaluate a control, including inquiry, observation, inspection of documentation, and re-performance of the control. The test procedure must match the nature of the control being evaluated.'},
+    {term:'Control objective',def:'The goal a control is designed to achieve, typically stated in terms of the Trust Services Criteria it supports. For example: "Logical access to the production environment is restricted to authorized individuals and reviewed periodically."'},
+    {term:'Continuous monitoring',def:'An ongoing process of evaluating control effectiveness using automated tools rather than periodic manual review. AWS-native tools like Config, CloudWatch, and Security Hub enable continuous monitoring that generates real-time evidence for SOC 2.'},
+    {term:'Remediation',def:'The process of addressing a control gap, deficiency, or identified risk by implementing or improving controls. Remediation timelines should be documented and tracked to demonstrate risk management maturity.'},
+    {term:'Readiness assessment',def:'An internal review conducted before a formal SOC 2 audit to identify control gaps, test procedures, and remediate deficiencies. A readiness assessment reduces the risk of exceptions and surprises during the formal examination.'},
+  ],
+  'Access and identity':[
+    {term:'Least privilege',def:'A foundational security principle requiring that users, roles, and services are granted only the minimum permissions necessary to perform their specific function. In AWS, this is enforced through IAM policies and validated via periodic access reviews and IAM Access Analyzer.'},
+    {term:'IAM (Identity and Access Management)',def:'The AWS service that controls who can access which AWS resources and what actions they can perform. IAM enables creation of users, groups, roles, and policies. Proper IAM configuration is the foundation of SOC 2 CC6.x compliance.'},
+    {term:'IAM policy',def:'A JSON document attached to an IAM identity or resource that defines permissions, specifying what actions are allowed or denied on which resources under which conditions. Policies are evaluated in combination; explicit Deny always overrides Allow.'},
+    {term:'IAM role',def:'An IAM identity with specific permissions that can be assumed by AWS services, applications, or users. Roles are the preferred mechanism for granting permissions to AWS services (such as EC2 or Lambda) without embedding long-lived credentials.'},
+    {term:'IAM Access Analyzer',def:'An AWS service that uses automated reasoning to identify resource-based policies that grant access to external principals (outside the account or organization). It surfaces overly permissive configurations that would otherwise require manual review to detect.'},
+    {term:'MFA (Multi-Factor Authentication)',def:'An authentication method requiring a second form of verification beyond a password, typically a time-based one-time code (TOTP) or hardware security key. SOC 2 CC6.3 requires strong authentication controls; MFA for privileged accounts is the most common implementation.'},
+    {term:'Service Control Policy (SCP)',def:'An AWS Organizations policy type that sets maximum permission boundaries across entire AWS accounts or organizational units. SCPs can enforce organizational requirements, such as mandatory MFA, that individual account administrators cannot override.'},
+    {term:'Access review',def:'A periodic process of evaluating which users and roles have access to systems and data, and confirming that access is still appropriate. SOC 2 CC6.6 requires that access rights are reviewed and removed when no longer needed. Typically performed quarterly.'},
+    {term:'Privileged access',def:'Administrative or elevated permissions that allow users to make significant changes to systems, configurations, or data, such as AWS account root access or IAM administrator roles. Privileged access requires additional controls including MFA and enhanced monitoring.'},
+    {term:'Separation of duties',def:'A control principle requiring that no single individual has end-to-end control over a sensitive process. In AWS, this is implemented by ensuring that developers cannot deploy directly to production, or that the person who approves access cannot provision it.'},
+    {term:'Single Sign-On (SSO)',def:'A centralized authentication mechanism that allows users to access multiple systems with one set of credentials. AWS IAM Identity Center (formerly SSO) provides centralized access management and supports integration with corporate identity providers.'},
+  ],
+  'Encryption and data protection':[
+    {term:'Encryption at rest',def:'Protection of stored data by converting it into an unreadable format using cryptographic algorithms. In AWS, services like S3, EBS, and RDS offer native encryption at rest using keys managed through AWS KMS. SOC 2 C1.1 requires that confidential data be encrypted at rest.'},
+    {term:'Encryption in transit',def:'Protection of data moving between systems or services using protocols such as TLS 1.2 or higher. This prevents interception of data in motion. SOC 2 C1.1 requires encryption in transit for confidential information.'},
+    {term:'AWS KMS (Key Management Service)',def:'An AWS managed service for creating, storing, rotating, and controlling access to cryptographic keys used to encrypt data. KMS integrates with most AWS services and logs all key usage to CloudTrail. It is the primary control for satisfying SOC 2 C1.1 requirements.'},
+    {term:'Customer Managed Key (CMK)',def:'An encryption key in AWS KMS that the customer creates, manages, and controls. CMKs offer more flexibility than AWS managed keys, including custom rotation schedules, key policies, and the ability to disable or delete the key.'},
+    {term:'Key rotation',def:'The process of periodically replacing an encryption key with a new one to limit the exposure window if a key is compromised. AWS KMS supports automatic annual rotation for CMKs. SOC 2 C1.1 auditors evaluate whether key rotation policies are in place and enforced.'},
+    {term:'S3 Block Public Access',def:'An AWS account-level and bucket-level setting that prevents S3 buckets from becoming publicly accessible regardless of individual bucket policies. Enabling Block Public Access at the account level is a baseline SOC 2 control for data confidentiality.'},
+    {term:'Server-side encryption (SSE)',def:'Encryption performed by the storage service (e.g., S3) automatically when data is written. S3 SSE-S3 uses AWS-managed keys; SSE-KMS uses KMS CMKs; SSE-C uses customer-provided keys. SSE-KMS provides the strongest audit trail through KMS CloudTrail logging.'},
+    {term:'Data classification',def:'The process of categorizing data based on its sensitivity (e.g., public, internal, confidential, restricted) to determine appropriate handling, storage, access, and disposal requirements. SOC 2 C1.1 requires that confidential information be identified before it can be protected.'},
+  ],
+  'Monitoring and logging':[
+    {term:'AWS CloudTrail',def:'An AWS service that records all API calls and console actions within an account, capturing who performed each action, when, from where, and on what resource. CloudTrail logs are the primary evidence source for CC7.1 and CC7.2 security monitoring requirements and are essential for incident investigation.'},
+    {term:'AWS CloudWatch',def:'AWS\'s monitoring and observability service that collects metrics, logs, and events from AWS resources and applications. CloudWatch Alarms can trigger notifications or automated remediation when metric thresholds are breached, satisfying CC7.3 alerting requirements.'},
+    {term:'AWS Config',def:'An AWS service that continuously records the configuration state of AWS resources and evaluates them against defined rules. Config Rules automatically flag non-compliant resources, satisfying CC7.4 configuration monitoring requirements and providing a change history for audit purposes.'},
+    {term:'AWS Security Hub',def:'A centralized security findings aggregation service that collects results from AWS services (GuardDuty, Inspector, Config, Macie) and partner tools. Security Hub provides a unified view of the security posture and maps findings to SOC 2 and other compliance frameworks.'},
+    {term:'Amazon GuardDuty',def:'An AWS threat detection service that continuously monitors CloudTrail logs, VPC Flow Logs, and DNS logs using machine learning to identify malicious activity such as unusual API calls, compromised credentials, and reconnaissance activity. Supports CC7.2 anomaly detection.'},
+    {term:'AWS Macie',def:'An AWS service that uses machine learning to automatically discover, classify, and protect sensitive data stored in S3. Macie identifies buckets containing PII or confidential data and alerts on access anomalies, directly supporting Confidentiality criteria.'},
+    {term:'VPC Flow Logs',def:'A feature that captures information about IP traffic flowing to and from network interfaces in a VPC. Flow Logs provide network-level visibility for detecting unusual traffic patterns, unauthorized port scanning, and data exfiltration attempts.'},
+    {term:'Log file validation',def:'A CloudTrail feature that creates a signed digest file for each batch of log files, allowing verification that logs have not been tampered with, deleted, or modified after delivery. This is critical for maintaining the integrity of the audit trail required by SOC 2.'},
+    {term:'CloudTrail data events',def:'Granular logging of data-plane operations on AWS resources, such as individual S3 object-level read and write operations or Lambda function invocations. Data events must be explicitly enabled and generate high log volumes; they are required for thorough C1.2 access monitoring.'},
+    {term:'Metric filter',def:'A CloudWatch feature that extracts numeric metrics from log data based on patterns. Metric filters on CloudTrail logs are used to count specific events (e.g., root account logins, security group changes) and trigger alarms when thresholds are exceeded.'},
+  ],
+  'Network and infrastructure':[
+    {term:'VPC (Virtual Private Cloud)',def:'An isolated, logically segmented network within AWS where resources are deployed. VPCs are divided into subnets, secured with security groups and NACLs, and connected to other networks via gateways. Proper VPC design is foundational to SOC 2 CC6.1 and C1.2 requirements.'},
+    {term:'Security group',def:'A virtual stateful firewall applied at the EC2 instance or network interface level, controlling inbound and outbound traffic based on protocol, port, and source/destination. Security groups are the primary network access control in AWS and directly support CC6.1.'},
+    {term:'NACL (Network Access Control List)',def:'A stateless network filter applied at the subnet level within a VPC. Unlike security groups, NACLs evaluate each packet independently and can explicitly deny traffic. NACLs provide a secondary layer of network access control in addition to security groups.'},
+    {term:'Private subnet',def:'A VPC subnet with no direct route to the internet gateway. Resources in private subnets communicate with the internet through a NAT gateway (outbound only) or not at all. Placing sensitive resources in private subnets is a core network segmentation control.'},
+    {term:'NAT gateway',def:'An AWS managed service that allows resources in private subnets to initiate outbound internet connections (e.g., for software updates) without exposing them to inbound internet traffic.'},
+    {term:'Internet gateway',def:'A VPC component that allows resources in public subnets to communicate with the internet bidirectionally. Only resources that explicitly need to be reachable from the internet (e.g., load balancers) should be placed in subnets with an internet gateway route.'},
+    {term:'Multi-AZ deployment',def:'An AWS architecture pattern that deploys resources across multiple geographically separated Availability Zones within a region, eliminating single points of failure. Multi-AZ is the primary technical control for satisfying SOC 2 A1.2 service resiliency requirements.'},
+    {term:'Auto Scaling',def:'An AWS service that automatically adjusts the number of EC2 instances (or other scalable resources) based on demand or health. Auto Scaling maintains availability during traffic spikes and automatically replaces unhealthy instances, directly satisfying A1.2 capacity management requirements.'},
+  ],
+  'Backup and recovery':[
+    {term:'AWS Backup',def:'A centralized, managed service for automating and monitoring backup jobs across AWS services including EC2, EBS, RDS, DynamoDB, EFS, and S3. AWS Backup provides a single pane of glass for backup compliance and supports cross-region and cross-account copies. Directly satisfies A1.3 recovery capability requirements.'},
+    {term:'RTO (Recovery Time Objective)',def:'The maximum acceptable duration from the point of a failure or disaster to the restoration of normal service operation. RTO drives architecture decisions (e.g., warm standby vs. cold standby) and must be documented and tested for SOC 2 A1.3 compliance.'},
+    {term:'RPO (Recovery Point Objective)',def:'The maximum acceptable amount of data loss measured in time, specifically the age of the most recent backup that must be recoverable after a failure. RPO drives backup frequency decisions and must be tested to confirm data can actually be recovered from within the RPO window.'},
+    {term:'Disaster recovery (DR)',def:'A documented set of policies, procedures, and tools designed to enable recovery of IT systems and data following a disruptive event. SOC 2 A1.3 requires that recovery procedures are documented, tested at least annually, and updated based on test findings.'},
+    {term:'Backup retention',def:'The period for which backup copies are stored before being deleted. Retention policies must balance recovery requirements against storage costs and any regulatory data retention obligations. SOC 2 auditors verify that retention policies are documented and enforced.'},
+    {term:'Cross-region replication',def:'Automatically copying backups or data to a different AWS region to protect against region-level failures or disasters. Cross-region backup copies are a best practice for satisfying A1.3 geographic redundancy requirements for critical systems.'},
+    {term:'Restore testing',def:'A scheduled exercise in which backup data is actually restored to a test environment to verify recoverability and validate that RTO/RPO targets can be met. Restore test results must be documented for SOC 2 A1.3 evidence. Testing backups without restoring them does not satisfy this requirement.'},
+    {term:'Business continuity plan (BCP)',def:'A broader organizational plan for maintaining essential business functions during and after a disaster. The BCP encompasses IT disaster recovery but also covers people, facilities, communications, and third-party dependencies. SOC 2 CC8.1 requires documentation and testing of business continuity procedures.'},
+  ],
+  'Configuration and change management':[
+    {term:'Configuration drift',def:'The gradual divergence of a system\'s actual configuration from its approved, documented baseline. Drift occurs through manual changes, automation errors, or unauthorized modifications. AWS Config detects drift continuously, satisfying CC7.4 configuration monitoring requirements.'},
+    {term:'AWS Config rule',def:'An automated evaluation that checks whether an AWS resource complies with a defined configuration requirement. AWS provides over 200 managed rules covering common security requirements; organizations can also write custom rules. Non-compliant findings are recorded and can trigger remediation.'},
+    {term:'Infrastructure as Code (IaC)',def:'The practice of defining and managing infrastructure through machine-readable configuration files (such as Terraform, CloudFormation, or CDK) rather than manual console actions. IaC enables consistent, auditable deployments and reduces configuration drift.'},
+    {term:'Change management',def:'A formal process for requesting, reviewing, approving, implementing, and documenting changes to systems and infrastructure. SOC 2 CC8.1 requires that changes are authorized, tested, and tracked. Unauthorized changes are a common source of audit findings.'},
+    {term:'AWS CloudFormation',def:'An AWS IaC service that provisions and manages AWS resources using declarative templates. CloudFormation stacks enable consistent, repeatable deployments and support drift detection to identify resources that have been manually modified outside the template.'},
+    {term:'Patch management',def:'The process of identifying, testing, and deploying software updates to address security vulnerabilities and maintain system stability. SOC 2 auditors evaluate whether a formal patch management program exists, patch timelines are defined, and compliance is monitored.'},
+  ],
+};
+
+/* RENDER FUNCTIONS */
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// Threats
+(function(){
+  const c=document.getElementById('threat-acc');
+  THREATS.forEach(t=>{
+    const d=document.createElement('div');d.className='acc';
+    d.innerHTML=`<button class="acc-hdr" onclick="toggleAcc(this)">
+      <span style="display:flex;align-items:center;gap:12px">
+        <strong style="color:var(--navy)">${t.service}</strong>
+        <span style="color:var(--muted);font-size:12px;font-weight:400">${t.threat}</span>
+      </span>
+      <span style="display:flex;align-items:center;gap:10px">
+        <span class="badge ${t.source==='Internal'?'badge-blue':'badge-high'}">${t.source}</span>
+        <span class="acc-arr">▼</span>
+      </span>
+    </button>
+    <div class="acc-body">
+      <p><strong style="color:var(--text)">Vulnerability:</strong> ${t.vuln}</p>
+      <p>${t.detail}</p>
+      <p><strong style="color:var(--text)">Mitigating controls:</strong> ${t.controls}</p>
+    </div>`;
+    c.appendChild(d);
+  });
+})();
+
+function toggleAcc(btn){
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+// Risk register
+(function(){
+  const filterRow=document.getElementById('risk-filters');
+  [['all','All risks','on'],['Critical','Critical','on-critical'],['High','High','on-high'],['Medium','Medium','on-medium']]
+    .forEach(([val,label,cls])=>{
+      const b=document.createElement('button');
+      b.className='rfbtn'+(val==='all'?' on':'');
+      b.textContent=label;
+      b.onclick=function(){filterRisks(val,this,cls)};
+      filterRow.appendChild(b);
+    });
+
+  const tbody=document.getElementById('risk-tbody');
+  RISKS.forEach((r,i)=>{
+    const rCls='r-'+r.rating.toLowerCase();
+    // main row
+    const tr=document.createElement('tr');
+    tr.className=rCls;tr.dataset.rating=r.rating;tr.style.cursor='pointer';
+    tr.onclick=()=>toggleDetail(i);
+    tr.innerHTML=`
+      <td class="td-id">${r.id}</td>
+      <td><span class="td-primary">${r.service}</span></td>
+      <td>
+        <div class="td-primary">${r.desc}</div>
+        <button class="expand-btn" id="ebtn-${i}" onclick="event.stopPropagation();toggleDetail(${i})">View details <span class="arr">▾</span></button>
+      </td>
+      <td><span class="badge badge-${r.likelihood==='High'?'critical':r.likelihood==='Medium'?'medium':'low'}">${r.likelihood}</span></td>
+      <td><span class="badge badge-${r.impact==='High'?'critical':r.impact==='Medium'?'medium':'low'}">${r.impact}</span></td>
+      <td><span class="badge badge-${r.rating.toLowerCase()}">${r.rating}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${r.owner}</td>`;
+    tbody.appendChild(tr);
+
+    // detail row
+    const dr=document.createElement('tr');
+    dr.className='rdetail';dr.id='rdetail-'+i;dr.dataset.rating=r.rating;
+    dr.innerHTML=`<td colspan="7">
+      <div class="rdetail-inner">
+        <div><div class="rdi-label">Context</div><div class="rdi-val">${r.detail}</div></div>
+        <div>
+          <div class="rdi-label">Mitigating controls</div><div class="rdi-val">${r.controls}</div>
+          <div class="rdi-label" style="margin-top:12px">Owner</div><div class="rdi-val">${r.owner}</div>
+        </div>
+      </div>
+    </td>`;
+    tbody.appendChild(dr);
+  });
+})();
+
+function toggleDetail(i){
+  const dr=document.getElementById('rdetail-'+i);
+  const btn=document.getElementById('ebtn-'+i);
+  const open=dr.style.display==='table-row';
+  dr.style.display=open?'none':'table-row';
+  btn.classList.toggle('open',!open);
+}
+
+function filterRisks(rating,btn,cls){
+  document.querySelectorAll('.rfbtn').forEach(b=>b.className='rfbtn');
+  btn.className='rfbtn '+cls;
+  document.querySelectorAll('#risk-tbody tr').forEach(r=>{
+    if(r.dataset.rating){
+      r.style.display=(rating==='all'||r.dataset.rating===rating)?'':'none';
+    }
+  });
+}
+
+// TSC panels
+function fillCtrl(bodyId,data){
+  const el=document.getElementById(bodyId);
+  data.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="td-primary ctrl-tbl-row">${c.name}</td><td class="td-mono">${c.criteria}</td><td style="color:var(--text2);font-size:13px">${c.desc}</td>`;
+    el.appendChild(tr);
+  });
+}
+fillCtrl('ctrl-sec-body',CTRL_SEC);
+fillCtrl('ctrl-avail-body',CTRL_AVAIL);
+fillCtrl('ctrl-conf-body',CTRL_CONF);
+fillCtrl('ctrl-comb-body',CTRL_COMB);
+
+function showTSC(id,btn){
+  document.querySelectorAll('.tsc-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tsc-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tsc-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Inventory
+(function(){
+  const tbody=document.getElementById('inv-tbody');
+  const freqBadge={Continuous:'badge-low',Daily:'badge-medium',Weekly:'badge-medium',Quarterly:'badge-high',Annually:'badge-critical'};
+  INVENTORY.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="td-id">${c.id}</td>
+      <td><div class="td-primary">${c.name}</div><div class="td-sub">${c.desc}</div></td>
+      <td style="font-size:13px;color:var(--text2)">${c.service}</td>
+      <td><span class="badge ${freqBadge[c.freq]||'badge-blue'}">${c.freq}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${c.owner}</td>
+      <td class="td-mono">${c.criteria}</td>`;
+    tbody.appendChild(tr);
+  });
+})();
+
+// Quiz
+let qAnswered=0,qCorrect=0;
+function initQuiz(){
+  qAnswered=0;qCorrect=0;
+  document.getElementById('quiz-score').style.display='none';
+  const c=document.getElementById('quiz-container');c.innerHTML='';c.style.display='block';
+  QUIZ_DATA.forEach((q,i)=>{
+    const card=document.createElement('div');card.className='quiz-card';card.id='qc'+i;
+    card.innerHTML=`<div class="quiz-num">Question ${i+1} of ${QUIZ_DATA.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-opts">${q.opts.map((o,j)=>`<button class="qopt" id="qo${i}_${j}" onclick="answerQ(${i},${j},${q.answer})">${o}</button>`).join('')}</div>
+      <div class="qfb" id="qfb${i}"></div>`;
+    c.appendChild(card);
+  });
+}
+function answerQ(qi,chosen,correct){
+  document.querySelectorAll(`#qc${qi} .qopt`).forEach(o=>o.disabled=true);
+  document.getElementById(`qo${qi}_${correct}`).classList.add('correct');
+  const fb=document.getElementById('qfb'+qi);
+  if(chosen===correct){qCorrect++;fb.textContent='Correct. '+QUIZ_DATA[qi].explain;fb.className='qfb correct';}
+  else{document.getElementById(`qo${qi}_${chosen}`).classList.add('wrong');fb.textContent='Not quite. '+QUIZ_DATA[qi].explain;fb.className='qfb wrong';}
+  fb.style.display='block';qAnswered++;
+  if(qAnswered===QUIZ_DATA.length){
+    setTimeout(()=>{
+      document.getElementById('quiz-container').style.display='none';
+      const s=document.getElementById('quiz-score');s.style.display='block';
+      document.getElementById('score-num').textContent=qCorrect;
+      const pct=Math.round(qCorrect/QUIZ_DATA.length*100);
+      document.getElementById('score-bar').style.width=pct+'%';
+      document.getElementById('score-sub').textContent=pct>=80?'Excellent. Strong command of the material.':pct>=60?'Good foundation. Review the sections where you hesitated.':'Keep going. Revisit the risk register and control mapping sections.';
+    },600);
+  }
+}
+window.addEventListener('load',initQuiz);
+
+// Glossary
+(function(){
+  const body=document.getElementById('gloss-body');
+  Object.entries(GLOSSARY).forEach(([cat,terms])=>{
+    const catDiv=document.createElement('div');catDiv.dataset.cat=cat.toLowerCase();
+    catDiv.innerHTML=`<div class="gloss-cat-title">${cat}</div>`;
+    terms.forEach(g=>{
+      const item=document.createElement('div');item.className='gterm';
+      item.dataset.search=(g.term+' '+g.def).toLowerCase();
+      item.innerHTML=`<button class="gterm-btn" onclick="toggleGterm(this)"><span>${g.term}</span><span class="gterm-arr">▼</span></button>
+        <div class="gterm-def"><p>${g.def}</p></div>`;
+      catDiv.appendChild(item);
+    });
+    body.appendChild(catDiv);
+  });
+})();
+
+function toggleGterm(btn){btn.classList.toggle('open');btn.nextElementSibling.classList.toggle('open');}
+
+function filterGloss(val){
+  const q=val.toLowerCase().trim();
+  document.querySelectorAll('.gterm').forEach(item=>{
+    item.classList.toggle('hidden',q.length>0&&!item.dataset.search.includes(q));
+  });
+}
+</script>
+</body>
+</html>
